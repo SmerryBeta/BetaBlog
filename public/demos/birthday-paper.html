@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>生日快乐 · 纸间生日会</title>
+<style>
+:root{
+  --paper:#fdf6ee; --red:#e85d75; --teal:#5cb8a5; --yellow:#f5c040; --blue:#6b7fb5;
+  --ink:#2d2d2d; --ink-soft:#666666; --ink-faint:#b0a898; --line:#e0d8cc;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:"YouYuan","幼圆","PingFang SC","Microsoft YaHei",sans-serif;
+  background:var(--paper);color:var(--ink);line-height:1.75;overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    repeating-linear-gradient(0deg,rgba(0,0,0,.014) 0 1px,transparent 1px 4px),
+    repeating-linear-gradient(90deg,rgba(0,0,0,.01) 0 1px,transparent 1px 6px);
+}
+.wrap{max-width:1080px;margin:0 auto;position:relative;z-index:1}
+
+.nav{border-bottom:2px solid var(--line);background:var(--paper);position:relative;z-index:2}
+.nav-inner{max-width:1080px;margin:0 auto;padding:16px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px}
+.logo-mark{width:16px;height:16px;background:var(--red);border-radius:5px;transform:rotate(-8deg);box-shadow:2px 2px 0 rgba(0,0,0,.08)}
+.nav-links{display:flex;gap:22px;font-size:13px}
+.nav-links a{color:var(--ink-soft);text-decoration:none;transition:color .2s ease-out}
+.nav-links a:hover{color:var(--red)}
+a:focus-visible,button:focus-visible{outline:3px solid rgba(232,93,117,.4);outline-offset:2px;border-radius:8px}
+
+.hero{padding:76px 16px 92px;position:relative}
+.float-piece{position:absolute;z-index:0;border-radius:3px;opacity:.55;animation:sway 6s ease-in-out infinite alternate}
+@keyframes sway{from{transform:translateY(0) rotate(var(--r,0deg))}to{transform:translateY(16px) rotate(calc(var(--r,0deg) + 16deg))}}
+.stack{position:relative;max-width:620px;margin:0 auto}
+.sheet{position:absolute;inset:0;border-radius:12px;border:2px solid rgba(0,0,0,.06);transition:transform .3s ease-out,box-shadow .3s ease-out}
+.sheet-teal{background:var(--teal);transform:rotate(-4deg);box-shadow:4px 4px 0 rgba(0,0,0,.08)}
+.sheet-yellow{background:var(--yellow);transform:rotate(3deg);box-shadow:4px 4px 0 rgba(0,0,0,.08)}
+.sheet-blue{background:var(--blue);transform:rotate(-1.5deg);box-shadow:4px 4px 0 rgba(0,0,0,.08)}
+.hero-card{position:relative;background:var(--paper);border:2px solid var(--line);border-radius:12px;padding:58px 32px 52px;text-align:center;box-shadow:4px 4px 0 rgba(0,0,0,.08);transform:rotate(1deg);transition:transform .3s ease-out,box-shadow .3s ease-out}
+.stack:hover .sheet-teal{transform:rotate(-7deg) translate(-12px,8px)}
+.stack:hover .sheet-yellow{transform:rotate(6deg) translate(14px,-10px)}
+.stack:hover .sheet-blue{transform:rotate(-3deg) translate(6px,12px)}
+.stack:hover .hero-card{transform:rotate(.5deg) translateY(-5px);box-shadow:6px 6px 0 rgba(0,0,0,.1)}
+.badge{display:inline-block;background:var(--yellow);font-size:13px;font-weight:600;padding:4px 16px;border-radius:10px;transform:rotate(-2deg);box-shadow:2px 2px 0 rgba(0,0,0,.08);margin-bottom:20px}
+.hero-card h1{font-size:clamp(38px,8vw,64px);font-weight:800;letter-spacing:3px;line-height:1.3}
+.hero-sub{color:var(--ink-soft);font-size:15px;max-width:26em;margin:14px auto 30px}
+.hero-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+
+.btn{display:inline-block;font-family:inherit;font-weight:600;font-size:16px;border-radius:12px;cursor:pointer;padding:12px 26px;text-decoration:none;transition:all .2s ease-out;border:none}
+.btn-primary{background:var(--red);color:#fff;box-shadow:3px 3px 0 rgba(0,0,0,.1)}
+.btn-primary:hover{transform:translateY(-4px);box-shadow:5px 5px 0 rgba(0,0,0,.12)}
+.btn-primary:active{transform:translateY(2px);box-shadow:1px 1px 0 rgba(0,0,0,.06)}
+.btn-ghost{background:#fff;color:var(--ink);border:2px solid var(--ink);box-shadow:3px 3px 0 rgba(0,0,0,.1)}
+.btn-ghost:hover{transform:translateY(-4px);box-shadow:5px 5px 0 rgba(0,0,0,.12);background:#fff}
+.btn-ghost:active{transform:translateY(2px);box-shadow:1px 1px 0 rgba(0,0,0,.06)}
+
+.sec{padding:64px 16px;position:relative}
+.sec-title{font-size:clamp(26px,4.5vw,36px);font-weight:800;text-align:center}
+.sec-sub{text-align:center;color:var(--ink-faint);font-size:14px;margin-top:8px}
+.ribbon{display:block;width:68px;height:9px;background:var(--yellow);border-radius:5px;margin:14px auto 0;transform:rotate(-1.5deg);box-shadow:2px 2px 0 rgba(0,0,0,.08)}
+.panel{background:var(--paper);border:2px solid var(--line);border-radius:12px;box-shadow:4px 4px 0 rgba(0,0,0,.08);max-width:560px;margin:40px auto 0;padding:44px 24px 36px;transform:rotate(-.6deg);text-align:center}
+
+.cake{width:min(300px,84%);margin:0 auto 30px;display:flex;flex-direction:column;align-items:center}
+.candles{display:flex;gap:22px;align-items:flex-end;margin-bottom:-4px;position:relative;z-index:2}
+.candle{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px 0;font-family:inherit}
+.flame{width:13px;height:17px;background:var(--yellow);border-radius:50% 50% 50% 50%/62% 62% 38% 38%;position:relative;transition:opacity .25s ease-out,transform .25s ease-out;animation:flicker 1.3s ease-in-out infinite}
+.flame::after{content:"";position:absolute;left:3.5px;top:7px;width:6px;height:7px;background:#fff;opacity:.9;border-radius:50% 50% 50% 50%/62% 62% 38% 38%}
+@keyframes flicker{0%,100%{transform:scale(1) rotate(-3deg)}50%{transform:scale(1.1,.94) rotate(4deg)}}
+.candle.out .flame{opacity:0;transform:scale(.15);animation:none}
+.stick{width:9px;height:40px;border-radius:5px;border:1px solid rgba(0,0,0,.08);background:repeating-linear-gradient(-45deg,#fff 0 5px,var(--c,#e85d75) 5px 10px)}
+.layer{border:2px solid rgba(0,0,0,.07);box-shadow:2px 2px 0 rgba(0,0,0,.05)}
+.layer-top{width:68%;height:42px;background:var(--teal);border-radius:10px 10px 5px 5px}
+.layer-mid{width:84%;height:50px;background:var(--yellow);border-radius:6px;margin-top:-2px}
+.layer-bot{width:100%;height:58px;background:var(--red);border-radius:10px 10px 14px 14px}
+.plate{width:calc(100% + 30px);height:18px;background:#fff;border:2px solid var(--line);border-radius:50%;margin-top:-9px;box-shadow:2px 2px 0 rgba(0,0,0,.06)}
+.hint{font-size:14px;color:var(--ink-soft)}
+.count{margin-top:6px;font-size:13px;color:var(--ink-faint);font-weight:600}
+
+.wish{display:none;margin-top:26px;background:var(--yellow);border:2px solid rgba(0,0,0,.07);border-radius:12px;padding:20px 18px;transform:rotate(-1deg);box-shadow:4px 4px 0 rgba(0,0,0,.08)}
+.wish.on{display:block;animation:rise .3s ease-out}
+@keyframes rise{from{opacity:0;transform:rotate(-1deg) translateY(12px)}to{opacity:1;transform:rotate(-1deg) translateY(0)}}
+.wish-text{font-size:17px;font-weight:700;margin-bottom:14px}
+
+.form-panel{text-align:left;transform:rotate(.6deg)}
+.fields{display:grid;grid-template-columns:1fr 2fr;gap:16px;margin-bottom:18px}
+label{display:block;font-size:13px;font-weight:600;margin-bottom:6px}
+.input{width:100%;background:rgba(255,255,255,.85);border:2px solid rgba(232,93,117,.3);border-radius:12px;padding:11px 14px;font-size:15px;color:#4a3728;font-family:inherit;transition:border-color .2s ease-out,box-shadow .2s ease-out}
+.input::placeholder{color:var(--ink-faint)}
+.input:focus{outline:none;border-color:rgba(92,184,165,.6);box-shadow:inset 0 3px 0 rgba(0,0,0,.06)}
+
+.notes{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:26px;max-width:1000px;margin:44px auto 0}
+.note{position:relative;background:#fff;border:2px solid var(--line);border-radius:12px;padding:40px 18px 16px;box-shadow:4px 4px 0 rgba(0,0,0,.08);transform:rotate(var(--r,1deg));transition:transform .2s ease-out,box-shadow .2s ease-out}
+.note:hover{transform:rotate(0deg) translateY(-4px);box-shadow:6px 6px 0 rgba(0,0,0,.1)}
+.tape{position:absolute;top:-11px;left:50%;width:66px;height:22px;border-radius:3px;transform:translateX(-50%) rotate(-3deg);background:var(--tape,rgba(232,93,117,.4));border:1px solid rgba(0,0,0,.05)}
+.note-msg{font-size:15px}
+.note-name{margin-top:12px;font-size:12px;color:var(--ink-faint);text-align:right}
+
+footer{border-top:2px solid var(--line);background:#fff;padding:44px 16px;text-align:center;color:var(--ink-soft);font-size:13px;position:relative;z-index:1}
+
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:80}
+.piece{position:absolute;animation:burst var(--t,1.4s) ease-out forwards}
+@keyframes burst{0%{transform:translate(0,0) rotate(0);opacity:1}70%{opacity:1}100%{transform:translate(var(--dx),var(--dy)) rotate(var(--rot));opacity:0}}
+
+@media (max-width:640px){
+  .fields{grid-template-columns:1fr}
+  .hero-card{padding:44px 20px 40px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+<div id="confetti" aria-hidden="true"></div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="#" style="text-decoration:none;color:inherit">
+      <span class="logo-mark" aria-hidden="true"></span>纸间生日会
+    </a>
+    <div class="nav-links">
+      <a href="#cake">吹蜡烛</a>
+      <a href="#wall">祝福墙</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+  <section class="hero">
+    <span class="float-piece" aria-hidden="true" style="left:7%;top:16%;width:12px;height:16px;background:var(--teal);--r:-14deg"></span>
+    <span class="float-piece" aria-hidden="true" style="left:12%;bottom:14%;width:10px;height:10px;background:var(--yellow);--r:10deg;animation-delay:-2s"></span>
+    <span class="float-piece" aria-hidden="true" style="right:8%;top:22%;width:14px;height:12px;background:var(--red);--r:8deg;animation-delay:-1s"></span>
+    <span class="float-piece" aria-hidden="true" style="right:14%;bottom:18%;width:10px;height:14px;background:var(--blue);--r:-8deg;animation-delay:-3s"></span>
+    <div class="stack">
+      <div class="sheet sheet-teal" aria-hidden="true"></div>
+      <div class="sheet sheet-yellow" aria-hidden="true"></div>
+      <div class="sheet sheet-blue" aria-hidden="true"></div>
+      <div class="hero-card">
+        <span class="badge">手作贺卡 · 今天装订完成</span>
+        <h1 id="heroTitle">生日快乐！</h1>
+        <p class="hero-sub">一张剪剪贴贴做出来的小贺卡，祝今天的主角开心到转圈，蛋糕吃到心满意足。</p>
+        <div class="hero-btns">
+          <a class="btn btn-primary" href="#cake">去吹蜡烛</a>
+          <a class="btn btn-ghost" href="#wall">写句祝福</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="cake">
+    <h2 class="sec-title">第一步：吹蜡烛</h2>
+    <span class="ribbon" aria-hidden="true"></span>
+    <p class="sec-sub">把五根蜡烛全部吹灭，就能解锁许愿环节</p>
+    <div class="panel">
+      <div class="cake">
+        <div class="candles">
+          <button class="candle" aria-pressed="false" aria-label="第 1 根蜡烛"><span class="flame" aria-hidden="true"></span><span class="stick" style="--c:#e85d75" aria-hidden="true"></span></button>
+          <button class="candle" aria-pressed="false" aria-label="第 2 根蜡烛"><span class="flame" aria-hidden="true"></span><span class="stick" style="--c:#5cb8a5" aria-hidden="true"></span></button>
+          <button class="candle" aria-pressed="false" aria-label="第 3 根蜡烛"><span class="flame" aria-hidden="true"></span><span class="stick" style="--c:#f5c040" aria-hidden="true"></span></button>
+          <button class="candle" aria-pressed="false" aria-label="第 4 根蜡烛"><span class="flame" aria-hidden="true"></span><span class="stick" style="--c:#6b7fb5" aria-hidden="true"></span></button>
+          <button class="candle" aria-pressed="false" aria-label="第 5 根蜡烛"><span class="flame" aria-hidden="true"></span><span class="stick" style="--c:#e85d75" aria-hidden="true"></span></button>
+        </div>
+        <div class="layer layer-top" aria-hidden="true"></div>
+        <div class="layer layer-mid" aria-hidden="true"></div>
+        <div class="layer layer-bot" aria-hidden="true"></div>
+        <div class="plate" aria-hidden="true"></div>
+      </div>
+      <p class="hint">点击蜡烛上的火苗，把它们一根根吹灭</p>
+      <p class="count" aria-live="polite">已吹灭 <span id="outCount">0</span> / 5 根蜡烛</p>
+      <div id="wishBox" class="wish" role="status">
+        <p class="wish-text">五根蜡烛都灭啦——快闭上眼睛许个愿！</p>
+        <button id="relight" class="btn btn-ghost">重新点亮蜡烛</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="wall">
+    <h2 class="sec-title">祝福墙</h2>
+    <span class="ribbon" aria-hidden="true"></span>
+    <p class="sec-sub">写下一句祝福，像贴便利贴一样把它贴到墙上</p>
+    <form id="wishForm" class="panel form-panel">
+      <div class="fields">
+        <div>
+          <label for="name">你的名字</label>
+          <input class="input" id="name" maxlength="10" placeholder="例如：小明">
+        </div>
+        <div>
+          <label for="msg">祝福语</label>
+          <input class="input" id="msg" maxlength="40" required placeholder="例如：祝你天天开心，蛋糕越吃越多">
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">贴上祝福</button>
+    </form>
+    <div id="notes" class="notes">
+      <div class="note" style="--r:-2deg">
+        <span class="tape" style="--tape:rgba(92,184,165,.45)" aria-hidden="true"></span>
+        <p class="note-msg">生日快乐！新的一岁也要白白胖胖，充满希望。</p>
+        <p class="note-name">—— 阿黄</p>
+      </div>
+      <div class="note" style="--r:1.5deg">
+        <span class="tape" style="--tape:rgba(245,192,64,.55)" aria-hidden="true"></span>
+        <p class="note-msg">愿你的烦恼像蜡烛一样，一口气就灭。</p>
+        <p class="note-name">—— 老王</p>
+      </div>
+      <div class="note" style="--r:-1deg">
+        <span class="tape" style="--tape:rgba(107,127,181,.4)" aria-hidden="true"></span>
+        <p class="note-msg">蛋糕不大，快乐管够。生日快乐！</p>
+        <p class="note-name">—— 小蓝</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>纸间生日会 · 一张小纸片装下的大祝福 —— 纸艺手作风格演示页面</footer>
+
+<script>
+(function(){
+  var $ = function(s){ return document.querySelector(s); };
+  var candles = Array.prototype.slice.call(document.querySelectorAll('.candle'));
+  var outCountEl = $('#outCount');
+  var wishBox = $('#wishBox');
+  var out = 0;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  var to = new URLSearchParams(location.search).get('to');
+  if(to){
+    $('#heroTitle').textContent = to + '，生日快乐！';
+    document.title = to + '，生日快乐 · 纸间生日会';
+  }
+
+  function burst(){
+    var box = $('#confetti');
+    var r = $('.cake').getBoundingClientRect();
+    var ox = r.left + r.width/2, oy = r.top + r.height/3;
+    var colors = ['#e85d75','#5cb8a5','#f5c040','#6b7fb5','#ffffff'];
+    for(var i=0;i<56;i++){
+      var p = document.createElement('div');
+      p.className = 'piece';
+      var w = 6 + Math.random()*7, h = 8 + Math.random()*9;
+      var dx = (Math.random()*340-170).toFixed(0);
+      var dy = (60 + Math.random()*300).toFixed(0);
+      var rot = (Math.random()<.5?-1:1)*(180 + Math.random()*420).toFixed(0);
+      var t = (0.9 + Math.random()*1.1).toFixed(2);
+      p.style.cssText = 'left:'+ox+'px;top:'+oy+'px;width:'+w+'px;height:'+h+'px;background:'+colors[i%colors.length]+';border-radius:'+(Math.random()<.3?'50%':'2px')+';--dx:'+dx+'px;--dy:'+dy+'px;--rot:'+rot+'deg;--t:'+t+'s';
+      p.addEventListener('animationend', function(){ this.remove(); });
+      box.appendChild(p);
+    }
+  }
+
+  candles.forEach(function(c){
+    c.addEventListener('click', function(){
+      if(c.classList.contains('out')) return;
+      c.classList.add('out');
+      c.setAttribute('aria-pressed','true');
+      out++;
+      outCountEl.textContent = out;
+      if(out === candles.length){
+        wishBox.classList.add('on');
+        if(!reduce.matches) burst();
+      }
+    });
+  });
+
+  $('#relight').addEventListener('click', function(){
+    candles.forEach(function(c){
+      c.classList.remove('out');
+      c.setAttribute('aria-pressed','false');
+    });
+    out = 0;
+    outCountEl.textContent = '0';
+    wishBox.classList.remove('on');
+  });
+
+  var tapes = ['rgba(232,93,117,.4)','rgba(92,184,165,.45)','rgba(245,192,64,.55)','rgba(107,127,181,.4)'];
+  $('#wishForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    var name = $('#name').value.trim() || '一位朋友';
+    var msg = $('#msg').value.trim();
+    if(!msg) return;
+    var note = document.createElement('div');
+    note.className = 'note';
+    note.style.setProperty('--r', (Math.random()*6-3).toFixed(1) + 'deg');
+    var tape = document.createElement('span');
+    tape.className = 'tape';
+    tape.style.setProperty('--tape', tapes[Math.floor(Math.random()*tapes.length)]);
+    var p1 = document.createElement('p');
+    p1.className = 'note-msg';
+    p1.textContent = msg;
+    var p2 = document.createElement('p');
+    p2.className = 'note-name';
+    p2.textContent = '—— ' + name;
+    note.appendChild(tape); note.appendChild(p1); note.appendChild(p2);
+    $('#notes').prepend(note);
+    e.target.reset();
+  });
+})();
+</script>
+</body>
+</html>
