@@ -1,5 +1,5 @@
 <script setup>
-import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 const memories = [
   { src: '/gallery/memory-01.webp', date: '2024.02.09', title: '樱花树下的相聚', tag: '相聚' },
@@ -29,11 +29,44 @@ const activeFilter = ref('全部')
 const selectedIndex = ref(-1)
 const surpriseOpen = ref(false)
 const slideDirection = ref('slide-left')
+const musicAudio = ref(null)
+const isMusicPlaying = ref(false)
 const closeButton = ref(null)
 const surpriseClose = ref(null)
 const toast = ref('')
 let toastTimer
 let previousFocus
+let musicWanted = true
+
+async function startMusic() {
+  try {
+    await musicAudio.value.play()
+    return true
+  } catch {
+    return false
+  }
+}
+
+function removeMusicUnlock() {
+  document.removeEventListener('pointerdown', unlockMusic)
+  document.removeEventListener('keydown', unlockMusic)
+}
+
+async function unlockMusic(event) {
+  if (event.target.closest?.('.music-player') || !musicWanted) return
+  if (await startMusic()) removeMusicUnlock()
+}
+
+async function toggleMusic() {
+  if (isMusicPlaying.value) {
+    musicWanted = false
+    musicAudio.value.pause()
+    removeMusicUnlock()
+    return
+  }
+  musicWanted = true
+  await startMusic()
+}
 
 const visibleMemories = computed(() => activeFilter.value === '全部'
   ? memories
@@ -129,8 +162,16 @@ function onKeydown(event) {
 }
 
 window.addEventListener('keydown', onKeydown)
+onMounted(async () => {
+  if (!await startMusic()) {
+    document.addEventListener('pointerdown', unlockMusic)
+    document.addEventListener('keydown', unlockMusic)
+  }
+})
 onBeforeUnmount(() => {
   window.removeEventListener('keydown', onKeydown)
+  removeMusicUnlock()
+  musicAudio.value?.pause()
   document.body.style.overflow = ''
   clearTimeout(toastTimer)
 })
@@ -144,12 +185,27 @@ onBeforeUnmount(() => {
           <img src="/gallery/qingling-avatar.webp" alt="钦灵的头像">
           <span><b>钦灵的生日手账</b><small>QINGLING'S LITTLE ALBUM</small></span>
         </router-link>
+        <button
+          class="music-player"
+          :class="{ playing: isMusicPlaying }"
+          type="button"
+          :aria-label="isMusicPlaying ? '暂停背景音乐：那个夏天' : '播放背景音乐：那个夏天'"
+          :aria-pressed="isMusicPlaying"
+          @click="toggleMusic"
+        >
+          <span class="vinyl-wrap" aria-hidden="true">
+            <span class="vinyl-record"><img src="/gallery/qingling-avatar.webp" alt=""></span>
+            <span class="tonearm"></span>
+          </span>
+          <span class="music-meta"><b>那个夏天</b><small>{{ isMusicPlaying ? '正在播放' : '点击播放' }} · 久石让</small></span>
+        </button>
         <nav class="birthday-nav-links" aria-label="生日手账导航">
           <a href="#memory-wall" @click.prevent="scrollToMemories">回忆相册</a>
           <router-link to="/"><span aria-hidden="true">←</span> 返回小站</router-link>
         </nav>
       </div>
     </header>
+    <audio ref="musicAudio" src="/gallery/one-summers-day.mp3" preload="auto" loop @play="isMusicPlaying = true" @pause="isMusicPlaying = false"></audio>
     <span
       v-for="(petal, index) in petals"
       :key="index"
@@ -328,6 +384,20 @@ onBeforeUnmount(() => {
 .birthday-brand span { display: flex; flex-direction: column; }
 .birthday-brand b { color: var(--deep-rose); font-size: 16px; letter-spacing: 1px; }
 .birthday-brand small { color: #aa7c8b; font-family: "Segoe Print", cursive; font-size: 8px; letter-spacing: 1px; }
+.music-player { display: flex; align-items: center; gap: 10px; padding: 4px 8px; border: 0; border-radius: 999px; background: transparent; color: var(--ink); cursor: pointer; transition: all .3s ease-in-out; }
+.music-player:hover { background: #ffedf2; transform: scale(1.03); }
+.vinyl-wrap { position: relative; display: block; width: 52px; height: 50px; flex-shrink: 0; }
+.vinyl-record { position: absolute; left: 0; bottom: 1px; display: grid; place-items: center; width: 46px; height: 46px; border: 2px solid #554b54; border-radius: 50%; background: repeating-radial-gradient(circle, #39323a 0 2px, #29252b 3px 4px, #484049 5px 6px); box-shadow: 0 4px 10px rgba(87, 61, 74, .2); }
+.vinyl-record::before { content: ""; position: absolute; width: 25px; height: 25px; border-radius: 50%; background: var(--pink); }
+.vinyl-record img { position: relative; width: 20px; height: 20px; border: 1px solid #fff; border-radius: 50%; object-fit: cover; }
+.tonearm { position: absolute; z-index: 2; top: 0; right: 1px; width: 3px; height: 29px; border-radius: 999px; background: #b5a6b0; box-shadow: 1px 1px 2px rgba(87, 61, 74, .15); transform: rotate(-9deg); transform-origin: 2px 4px; transition: transform .5s ease-in-out; }
+.tonearm::before { content: ""; position: absolute; top: -2px; left: -3px; width: 9px; height: 9px; border: 2px solid #a3939e; border-radius: 50%; background: #fff; }
+.tonearm::after { content: ""; position: absolute; bottom: -2px; left: -2px; width: 7px; height: 6px; border-radius: 2px; background: #8e7b86; }
+.music-player.playing .vinyl-record { animation: record-spin 6s linear infinite; }
+.music-player.playing .tonearm { transform: rotate(23deg); }
+.music-meta { display: flex; flex-direction: column; min-width: 96px; text-align: left; line-height: 1.6; }
+.music-meta b { color: #875468; font-size: 12px; }
+.music-meta small { color: #a17b88; font-size: 9px; }
 .birthday-nav-links { display: flex; align-items: center; gap: 10px; }
 .birthday-nav-links a { padding: 8px 17px; border-radius: 999px; color: #875468; font-size: 13px; transition: all .3s ease-in-out; }
 .birthday-nav-links a:hover { background: #ffe8ee; color: var(--deep-rose); text-decoration: none; }
@@ -458,6 +528,7 @@ onBeforeUnmount(() => {
 .toast-slide-enter-active, .toast-slide-leave-active { transition: all .3s ease-in-out; }
 .toast-slide-enter-from, .toast-slide-leave-to { opacity: 0; transform: translate(-50%, 10px); }
 @keyframes petal-drift { 0%, 100% { transform: translate(0, -8px) rotate(15deg); } 50% { transform: translate(22px, 25px) rotate(145deg); } }
+@keyframes record-spin { to { transform: rotate(360deg); } }
 @keyframes twinkle { 0%, 100% { transform: scale(.75) rotate(0); opacity: .65; } 50% { transform: scale(1.12) rotate(20deg); opacity: 1; } }
 @media (max-width: 1000px) {
   .birthday-hero { gap: 35px; }
@@ -474,6 +545,8 @@ onBeforeUnmount(() => {
   .birthday-brand img { width: 40px; height: 40px; }
   .birthday-brand b { font-size: 14px; }
   .birthday-brand small { display: none; }
+  .music-player { padding: 2px; }
+  .music-meta { display: none; }
   .birthday-nav-links { gap: 4px; }
   .birthday-nav-links a { padding: 7px 12px; font-size: 12px; }
   .birthday-hero { grid-template-columns: 1fr; gap: 45px; padding-block: 52px 85px; }
@@ -527,7 +600,7 @@ onBeforeUnmount(() => {
   .surprise-card p br { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .falling-petal, .gold-sparkle { animation: none; }
+  .falling-petal, .gold-sparkle, .music-player.playing .vinyl-record { animation: none; }
   .birthday-page *, .birthday-page *::before, .birthday-page *::after { scroll-behavior: auto; transition-duration: .01ms; }
 }
 </style>
