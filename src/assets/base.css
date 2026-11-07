@@ -58,6 +58,7 @@ nav a { color: var(--ink-soft); }
 nav a.router-link-active { color: var(--red-deep); font-weight: 700; }
 
 main { flex: 1; padding: 48px 0 72px; }
+.main-wide { flex: 1; padding: 0; }
 
 .hero { position: relative; margin-bottom: 40px; padding: 8px 4px; }
 .badge {
@@ -77,6 +78,29 @@ main { flex: 1; padding: 48px 0 72px; }
 .float-piece { position: absolute; border-radius: 3px; opacity: 0.55; }
 .float-piece.fp1 { left: -14px; top: 12px; width: 12px; height: 16px; background: var(--teal); transform: rotate(-14deg); }
 .float-piece.fp2 { right: -8px; top: 44px; width: 13px; height: 12px; background: var(--blue); transform: rotate(10deg); }
+
+.birthday-entry {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin: -12px 0 36px;
+  padding: 22px 24px;
+  border: 2px solid rgba(255, 183, 197, .45);
+  border-radius: 20px;
+  background-color: #fff5f7;
+  background-image: radial-gradient(circle, rgba(255, 183, 197, .24) .6px, transparent .8px);
+  background-size: 10px 10px;
+  color: #4a3f49;
+  box-shadow: 0 5px 20px rgba(255, 183, 197, .22);
+  transition: all .3s ease-in-out;
+}
+.birthday-entry:hover { transform: scale(1.015); box-shadow: 0 8px 28px rgba(255, 183, 197, .35); text-decoration: none; }
+.birthday-entry-flower { flex-shrink: 0; color: #db91a6; font-size: 38px; }
+.birthday-entry > span:nth-child(2) { display: flex; flex: 1; flex-direction: column; }
+.birthday-entry small { color: #a26f80; font-size: 11px; }
+.birthday-entry strong { color: #94445d; font-size: 18px; }
+.birthday-entry em { color: #806e79; font-size: 12px; font-style: normal; }
+.birthday-entry > b { flex-shrink: 0; color: #94445d; font-size: 13px; }
 
 .post-list { display: flex; flex-direction: column; gap: 22px; }
 .post-card {
@@ -193,4 +217,14 @@ main { flex: 1; padding: 48px 0 72px; }
   font-size: 13px;
   color: var(--ink-faint);
   text-align: center;
+}
+
+@media (max-width: 520px) {
+  nav { gap: 13px; font-size: 12px; }
+  .header-inner { padding-inline: 16px; }
+  .logo { font-size: 15px; }
+  .birthday-entry { align-items: flex-start; gap: 12px; padding: 18px; }
+  .birthday-entry-flower { font-size: 27px; }
+  .birthday-entry strong { font-size: 15px; }
+  .birthday-entry > b { display: none; }
 }

@@ -8,12 +8,13 @@ import site from './site.js'
       <div class="wrap header-inner">
         <router-link to="/" class="logo"><span class="logo-mark" aria-hidden="true"></span>{{ site.name }}</router-link>
         <nav>
-          <router-link to="/">主页</router-link>
+          <router-link to="/" exact>主页</router-link>
+          <router-link to="/birthday">樱花生日</router-link>
           <router-link to="/about">关于</router-link>
         </nav>
       </div>
     </header>
-    <main class="wrap">
+    <main :class="$route.meta.wide ? 'main-wide' : 'wrap'">
       <router-view />
     </main>
     <footer class="site-footer">

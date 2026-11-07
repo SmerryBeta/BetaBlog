@@ -15,6 +15,11 @@ function excerpt(body) {
     <h1>{{ site.name }}</h1>
     <p>{{ site.intro }}</p>
   </section>
+  <router-link to="/birthday" class="birthday-entry">
+    <span class="birthday-entry-flower" aria-hidden="true">✿</span>
+    <span><small>一本新的春日手账</small><strong>樱花落下时，祝你生日快乐</strong><em>15 张照片，和一个会动的小惊喜</em></span>
+    <b>翻开看看 <span aria-hidden="true">→</span></b>
+  </router-link>
   <section class="post-list">
     <router-link
       v-for="p in posts"
