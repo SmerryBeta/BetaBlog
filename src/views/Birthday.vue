@@ -28,6 +28,7 @@ const filters = ['全部', '相聚', '日常', '风景']
 const activeFilter = ref('全部')
 const selectedIndex = ref(-1)
 const surpriseOpen = ref(false)
+const slideDirection = ref('slide-left')
 const closeButton = ref(null)
 const surpriseClose = ref(null)
 const toast = ref('')
@@ -58,7 +59,18 @@ function closeImage() {
 }
 
 function turnImage(direction) {
+  slideDirection.value = direction > 0 ? 'slide-left' : 'slide-right'
   selectedIndex.value = (selectedIndex.value + direction + memories.length) % memories.length
+}
+
+let touchStartX = 0
+function onTouchStart(event) {
+  touchStartX = event.changedTouches[0].clientX
+}
+
+function onTouchEnd(event) {
+  const distance = event.changedTouches[0].clientX - touchStartX
+  if (Math.abs(distance) > 45) turnImage(distance < 0 ? 1 : -1)
 }
 
 function openSurprise() {
@@ -76,7 +88,7 @@ function closeSurprise() {
 }
 
 async function saveWish() {
-  const text = '愿你往后的每一天，都有樱花、星光和好消息。生日快乐！'
+  const text = '钦灵，愿你往后的每一天，都有樱花、星光和好消息。生日快乐！'
   try {
     await navigator.clipboard.writeText(text)
     toast.value = '这句祝福已经复制好啦'
@@ -126,6 +138,18 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="birthday-page">
+    <header class="birthday-nav">
+      <div class="birthday-shell nav-inner">
+        <router-link to="/birthday" class="birthday-brand" aria-label="钦灵的生日手账首页">
+          <img src="/gallery/qingling-avatar.webp" alt="钦灵的头像">
+          <span><b>钦灵的生日手账</b><small>QINGLING'S LITTLE ALBUM</small></span>
+        </router-link>
+        <nav class="birthday-nav-links" aria-label="生日手账导航">
+          <a href="#memory-wall" @click.prevent="scrollToMemories">回忆相册</a>
+          <router-link to="/"><span aria-hidden="true">←</span> 返回小站</router-link>
+        </nav>
+      </div>
+    </header>
     <span
       v-for="(petal, index) in petals"
       :key="index"
@@ -136,9 +160,12 @@ onBeforeUnmount(() => {
 
     <section class="birthday-hero birthday-shell" aria-labelledby="birthday-title">
       <div class="hero-copy">
-        <div class="date-chip"><span>11</span><i>月</i><span>09</span><i>日</i></div>
+        <div class="recipient-line">
+          <div class="recipient-chip"><img src="/gallery/qingling-avatar.webp" alt="钦灵"><span><small>今天的主角</small><b>钦灵</b></span></div>
+          <span class="birthday-date">11 · 09</span>
+        </div>
         <p class="handwritten">A little birthday archive, made with love.</p>
-        <h1 id="birthday-title">樱花落下时，<br><em>祝你生日快乐</em></h1>
+        <h1 id="birthday-title">樱花落下时，<br><em>钦灵，生日快乐</em></h1>
         <p class="hero-intro">把一起看过的风景、笑过的瞬间，都夹进这本春日手账。新的一岁，也要被温柔和好消息包围。</p>
         <div class="hero-actions">
           <button class="pill-button primary-button" type="button" @click="openSurprise">
@@ -158,7 +185,7 @@ onBeforeUnmount(() => {
         <span class="gold-sparkle sparkle-one" aria-hidden="true"></span>
         <span class="gold-sparkle sparkle-two" aria-hidden="true"></span>
         <button class="gif-teaser" type="button" @click="openSurprise" aria-label="打开白发猫耳少女的生日惊喜动画">
-          <img src="/gallery/birthday-surprise.gif" alt="白发猫耳少女捧着生日蛋糕">
+          <img src="/gallery/birthday-surprise-poster.webp" alt="生日惊喜动画的静态封面">
           <span>藏着一个小惊喜 <b>点我拆开</b></span>
         </button>
       </div>
@@ -220,7 +247,7 @@ onBeforeUnmount(() => {
         <span class="letter-stamp" aria-hidden="true">✿<small>FOR YOU</small></span>
         <div class="letter-copy">
           <span class="section-kicker">A LETTER FOR YOUR NEW CHAPTER</span>
-          <h2 id="letter-title">致新一岁的你</h2>
+          <h2 id="letter-title">致新一岁的钦灵</h2>
           <p>希望你不必总是勇敢，也可以偶尔偷懒；希望你想去的地方都能抵达，想见的人都会重逢。</p>
           <p>如果生活偶尔下起雨，就记得这里还存着许多晴天。生日快乐，今天和以后的每一天都要快乐。</p>
           <div class="letter-signature">永远为你留一盏灯的人 <span>♡</span></div>
@@ -232,14 +259,22 @@ onBeforeUnmount(() => {
       </div>
     </section>
 
+    <footer class="birthday-footer">
+      <img src="/gallery/qingling-avatar.webp" alt="">
+      <p>樱花会落下，回忆不会。</p>
+      <span>这本小小的手账，送给独一无二的钦灵。</span>
+    </footer>
+
     <Transition name="modal-fade">
-      <div v-if="selectedMemory" class="photo-modal" role="dialog" aria-modal="true" :aria-label="selectedMemory.title" @click.self="closeImage">
+      <div v-if="selectedMemory" class="photo-modal" role="dialog" aria-modal="true" :aria-label="selectedMemory.title" @click.self="closeImage" @touchstart="onTouchStart" @touchend="onTouchEnd">
         <button ref="closeButton" class="modal-close" type="button" aria-label="关闭照片" @click="closeImage">×</button>
         <button class="modal-arrow previous" type="button" aria-label="上一张照片" @click="turnImage(-1)">‹</button>
-        <figure>
-          <img :src="selectedMemory.src" :alt="selectedMemory.title">
-          <figcaption><span>{{ selectedMemory.date }}</span><b>{{ selectedMemory.title }}</b><small>{{ selectedIndex + 1 }} / {{ memories.length }}</small></figcaption>
-        </figure>
+        <Transition :name="slideDirection" mode="out-in">
+          <figure :key="selectedIndex">
+            <img :src="selectedMemory.src" :alt="selectedMemory.title">
+            <figcaption><span>{{ selectedMemory.date }}</span><b>{{ selectedMemory.title }}</b><small>{{ selectedIndex + 1 }} / {{ memories.length }}</small></figcaption>
+          </figure>
+        </Transition>
         <button class="modal-arrow next" type="button" aria-label="下一张照片" @click="turnImage(1)">›</button>
       </div>
     </Transition>
@@ -252,7 +287,7 @@ onBeforeUnmount(() => {
           <div class="animation-frame">
             <img src="/gallery/birthday-surprise.gif" alt="白发猫耳少女捧着生日蛋糕，送来生日快乐祝福">
           </div>
-          <h2 id="surprise-title">叮咚，你的生日惊喜到啦！</h2>
+          <h2 id="surprise-title">钦灵，你的生日惊喜到啦！</h2>
           <p>蛋糕上的烛光、樱花下的约定，还有这句最郑重的祝福：<br><strong>愿你所求皆如愿，所行皆坦途。</strong></p>
           <span class="surprise-date">11 · 09 &nbsp; HAPPY BIRTHDAY</span>
           <span class="gold-sparkle surprise-sparkle" aria-hidden="true"></span>
@@ -284,14 +319,31 @@ onBeforeUnmount(() => {
   background-size: 12px 12px;
 }
 .birthday-shell { width: min(1160px, calc(100% - 64px)); margin-inline: auto; }
+.birthday-nav { position: sticky; top: 0; z-index: 50; border-bottom: 2px solid rgba(255, 183, 197, .22); background: #fff8fa; box-shadow: 0 3px 16px rgba(255, 183, 197, .13); }
+.nav-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 76px; }
+.birthday-brand { display: flex; align-items: center; gap: 12px; color: var(--ink); }
+.birthday-brand:hover { text-decoration: none; }
+.birthday-brand img { width: 46px; height: 46px; padding: 2px; border: 2px solid #ffd4df; border-radius: 50%; background: #fff; object-fit: cover; box-shadow: 0 3px 12px rgba(255, 183, 197, .28); transition: transform .3s ease-in-out; }
+.birthday-brand:hover img { transform: rotate(-5deg) scale(1.06); }
+.birthday-brand span { display: flex; flex-direction: column; }
+.birthday-brand b { color: var(--deep-rose); font-size: 16px; letter-spacing: 1px; }
+.birthday-brand small { color: #aa7c8b; font-family: "Segoe Print", cursive; font-size: 8px; letter-spacing: 1px; }
+.birthday-nav-links { display: flex; align-items: center; gap: 10px; }
+.birthday-nav-links a { padding: 8px 17px; border-radius: 999px; color: #875468; font-size: 13px; transition: all .3s ease-in-out; }
+.birthday-nav-links a:hover { background: #ffe8ee; color: var(--deep-rose); text-decoration: none; }
+.birthday-nav-links a:last-child { border: 1px solid #f2cbd6; background: #fff; }
 .birthday-hero { min-height: 660px; display: grid; grid-template-columns: .93fr 1.07fr; align-items: center; gap: 64px; padding-block: 72px 94px; }
 .hero-copy { position: relative; z-index: 2; }
-.date-chip { display: inline-flex; align-items: baseline; gap: 7px; padding: 7px 17px; border: 1px solid rgba(157, 72, 98, .2); border-radius: 999px; background: #fff; color: var(--deep-rose); box-shadow: 0 4px 16px rgba(255, 183, 197, .2); transform: rotate(-2deg); }
-.date-chip span { font-family: Georgia, "Times New Roman", serif; font-size: 18px; font-weight: 700; }
-.date-chip i { font-size: 11px; font-style: normal; }
+.recipient-line { display: flex; align-items: center; gap: 15px; }
+.recipient-chip { display: inline-flex; align-items: center; gap: 9px; padding: 5px 15px 5px 5px; border: 1px solid rgba(157, 72, 98, .18); border-radius: 999px; background: #fff; box-shadow: 0 4px 16px rgba(255, 183, 197, .2); }
+.recipient-chip img { width: 39px; height: 39px; border-radius: 50%; object-fit: cover; }
+.recipient-chip span { display: flex; flex-direction: column; line-height: 1.4; }
+.recipient-chip small { color: #a17b88; font-size: 9px; }
+.recipient-chip b { color: var(--deep-rose); font-size: 14px; }
+.birthday-date { color: #ad7184; font: 16px Georgia, serif; letter-spacing: 2px; }
 .handwritten { margin-top: 25px; color: #a16a7d; font-family: "Segoe Print", "Comic Sans MS", cursive; font-size: 14px; transform: rotate(-1deg); }
 .hero-copy h1 { margin-top: 12px; font-size: clamp(43px, 5vw, 67px); line-height: 1.24; letter-spacing: .03em; font-weight: 800; }
-.hero-copy h1 em { color: var(--deep-rose); font-style: normal; position: relative; }
+.hero-copy h1 em { color: var(--deep-rose); font-size: .92em; font-style: normal; position: relative; }
 .hero-copy h1 em::after { content: ""; position: absolute; height: 10px; left: 1%; right: 1%; bottom: -4px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='10' viewBox='0 0 300 10'%3E%3Cpath d='M2 7c73-7 177 2 296-4' fill='none' stroke='%23ffb7c5' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat; opacity: .7; }
 .hero-intro { max-width: 31em; margin-top: 26px; color: var(--soft-ink); font-size: 16px; line-height: 2; }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 13px; margin-top: 30px; }
@@ -366,7 +418,11 @@ onBeforeUnmount(() => {
 .letter-signature span { margin-left: 8px; font-size: 20px; }
 .letter-action { display: flex; flex-direction: column; align-items: center; gap: 11px; padding-bottom: 10px; }
 .tiny-note { color: #9f7c88; font-size: 11px; }
-.photo-modal, .surprise-modal { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; padding: 60px 100px; background: rgba(91, 61, 72, .65); backdrop-filter: blur(7px); }
+.birthday-footer { display: flex; flex-direction: column; align-items: center; padding: 35px 24px 38px; border-top: 2px solid rgba(255, 183, 197, .2); background: #ffe8ee; text-align: center; }
+.birthday-footer img { width: 45px; height: 45px; padding: 2px; border: 2px solid #fff; border-radius: 50%; object-fit: cover; box-shadow: 0 3px 14px rgba(255, 183, 197, .35); }
+.birthday-footer p { margin-top: 9px; color: var(--deep-rose); font-size: 14px; font-weight: 700; }
+.birthday-footer span { margin-top: 3px; color: #946878; font-size: 11px; }
+.photo-modal, .surprise-modal { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; padding: 60px 100px; overflow: hidden; background: rgba(91, 61, 72, .65); backdrop-filter: blur(7px); }
 .photo-modal figure { width: min(1100px, 100%); max-height: calc(100vh - 120px); margin: 0; padding: 12px; border-radius: 22px; background: #fff; box-shadow: 0 10px 50px rgba(91, 61, 72, .25); }
 .photo-modal figure img { display: block; width: 100%; max-height: calc(100vh - 205px); object-fit: contain; border-radius: 13px; background: #fff5f7; }
 .photo-modal figcaption { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 20px; padding: 13px 9px 2px; color: #8f6977; }
@@ -394,6 +450,11 @@ onBeforeUnmount(() => {
 .birthday-page button:focus-visible, .birthday-page a:focus-visible { outline: 3px solid #b46b82; outline-offset: 4px; }
 .modal-fade-enter-active, .modal-fade-leave-active { transition: opacity .3s ease-in-out; }
 .modal-fade-enter-from, .modal-fade-leave-to { opacity: 0; }
+.slide-left-enter-active, .slide-left-leave-active, .slide-right-enter-active, .slide-right-leave-active { transition: transform .38s ease-in-out, opacity .38s ease-in-out; }
+.slide-left-enter-from { transform: translateX(70px); opacity: 0; }
+.slide-left-leave-to { transform: translateX(-70px); opacity: 0; }
+.slide-right-enter-from { transform: translateX(-70px); opacity: 0; }
+.slide-right-leave-to { transform: translateX(70px); opacity: 0; }
 .toast-slide-enter-active, .toast-slide-leave-active { transition: all .3s ease-in-out; }
 .toast-slide-enter-from, .toast-slide-leave-to { opacity: 0; transform: translate(-50%, 10px); }
 @keyframes petal-drift { 0%, 100% { transform: translate(0, -8px) rotate(15deg); } 50% { transform: translate(22px, 25px) rotate(145deg); } }
@@ -409,8 +470,15 @@ onBeforeUnmount(() => {
 }
 @media (max-width: 760px) {
   .birthday-shell { width: min(100% - 34px, 620px); }
+  .nav-inner { min-height: 68px; }
+  .birthday-brand img { width: 40px; height: 40px; }
+  .birthday-brand b { font-size: 14px; }
+  .birthday-brand small { display: none; }
+  .birthday-nav-links { gap: 4px; }
+  .birthday-nav-links a { padding: 7px 12px; font-size: 12px; }
   .birthday-hero { grid-template-columns: 1fr; gap: 45px; padding-block: 52px 85px; }
   .hero-copy { text-align: center; }
+  .recipient-line { justify-content: center; }
   .hero-copy h1 { font-size: clamp(39px, 10vw, 54px); }
   .hero-intro { margin-inline: auto; }
   .hero-actions { justify-content: center; }
@@ -434,6 +502,11 @@ onBeforeUnmount(() => {
   .surprise-card h2 { font-size: 23px; }
 }
 @media (max-width: 480px) {
+  .nav-inner { gap: 8px; }
+  .birthday-brand { gap: 8px; }
+  .birthday-brand b { font-size: 13px; letter-spacing: 0; }
+  .birthday-nav-links a:first-child { display: none; }
+  .birthday-nav-links a:last-child { padding-inline: 10px; }
   .hero-actions { flex-direction: column; align-items: stretch; }
   .pill-button { width: 100%; }
   .hero-scrapbook { padding-inline: 3px; }
