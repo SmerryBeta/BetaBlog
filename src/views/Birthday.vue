@@ -2,21 +2,21 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 const memories = [
-  { src: '/gallery/memory-01.webp', date: '2024.02.09', title: '樱花树下的相聚', tag: '相聚' },
-  { src: '/gallery/memory-02.webp', date: '2024.02.27', title: '灯火里的合影', tag: '相聚' },
+  { src: '/gallery/memory-01.webp', date: '2024.02.09', title: '胡萝屯的我们', tag: '相聚' },
+  { src: '/gallery/memory-02.webp', date: '2024.02.27', title: '樱花树下', tag: '相聚' },
   { src: '/gallery/memory-03.webp', date: '2024.03.10', title: '今日份躺平', tag: '日常' },
   { src: '/gallery/memory-04.webp', date: '2024.03.10', title: '月光与晚风', tag: '风景' },
-  { src: '/gallery/memory-05.webp', date: '2024.03.13', title: '就这样靠一会儿', tag: '日常' },
-  { src: '/gallery/memory-06.webp', date: '2024.03.14', title: '转角的偶遇', tag: '相聚' },
-  { src: '/gallery/memory-07.webp', date: '2024.03.14', title: '夜色中的主角', tag: '风景' },
-  { src: '/gallery/memory-08.webp', date: '2024.03.14', title: '灯笼亮起来了', tag: '风景' },
-  { src: '/gallery/memory-09.webp', date: '2024.03.24', title: '小小冒险家', tag: '日常' },
-  { src: '/gallery/memory-10.webp', date: '2024.05.18', title: '花路上的三人组', tag: '相聚' },
-  { src: '/gallery/memory-11.webp', date: '2024.05.24', title: '一起去喝下午茶', tag: '相聚' },
-  { src: '/gallery/memory-12.webp', date: '2024.05.31', title: '星光落在肩上', tag: '风景' },
-  { src: '/gallery/memory-13.webp', date: '2024.05.31', title: '新地图，新故事', tag: '日常' },
+  { src: '/gallery/memory-05.webp', date: '2024.03.13', title: '就这样靠着我', tag: '日常' },
+  { src: '/gallery/memory-06.webp', date: '2024.03.14', title: '哦我的天', tag: '相聚' },
+  { src: '/gallery/memory-07.webp', date: '2024.03.14', title: '夜色中看你', tag: '风景' },
+  { src: '/gallery/memory-08.webp', date: '2024.03.14', title: '雄姿英发', tag: '风景' },
+  { src: '/gallery/memory-09.webp', date: '2024.03.24', title: '大狗瞪小狗', tag: '日常' },
+  { src: '/gallery/memory-10.webp', date: '2024.05.18', title: '你送我的祝福，我还记得', tag: '相聚' },
+  { src: '/gallery/memory-11.webp', date: '2024.05.24', title: '最忙三人组', tag: '相聚' },
+  { src: '/gallery/memory-12.webp', date: '2024.05.31', title: '星光落在钦灵の草窝', tag: '风景' },
+  { src: '/gallery/memory-13.webp', date: '2024.05.31', title: '别打我啦 ￣へ￣', tag: '日常' },
   { src: '/gallery/memory-14.webp', date: '2024.06.21', title: '一起去看星星', tag: '风景' },
-  { src: '/gallery/memory-15.webp', date: '2024.07.11', title: '晴空下的散步', tag: '相聚' },
+  { src: '/gallery/memory-15.webp', date: '2024.07.11', title: '晴空下的我们', tag: '相聚' },
 ]
 
 const petals = [
@@ -38,6 +38,23 @@ let toastTimer
 let previousFocus
 let musicWanted = true
 
+const uiSounds = {
+  click: new Audio('/gallery/sounds/ui-click.mp3'),
+  pop: new Audio('/gallery/sounds/ui-pop.mp3'),
+  wood: new Audio('/gallery/sounds/ui-wood-click.mp3'),
+  turn: new Audio('/gallery/sounds/ui-turn.mp3'),
+  giftOpen: new Audio('/gallery/sounds/ui-gift-open.mp3'),
+  giftClose: new Audio('/gallery/sounds/ui-gift-close.mp3'),
+}
+
+function playUiSound(name) {
+  const sound = uiSounds[name]
+  if (!sound) return
+  sound.volume = 0.8
+  sound.currentTime = 0
+  sound.play().catch(() => {})
+}
+
 async function startMusic() {
   try {
     await musicAudio.value.play()
@@ -58,6 +75,7 @@ async function unlockMusic(event) {
 }
 
 async function toggleMusic() {
+  playUiSound('click')
   if (isMusicPlaying.value) {
     musicWanted = false
     musicAudio.value.pause()
@@ -82,16 +100,19 @@ function restoreFocus() {
 }
 
 function openImage(memory) {
+  playUiSound('pop')
   rememberFocus()
   selectedIndex.value = memories.indexOf(memory)
 }
 
 function closeImage() {
+  playUiSound('wood')
   selectedIndex.value = -1
   restoreFocus()
 }
 
 function turnImage(direction) {
+  playUiSound('turn')
   slideDirection.value = direction > 0 ? 'slide-left' : 'slide-right'
   selectedIndex.value = (selectedIndex.value + direction + memories.length) % memories.length
 }
@@ -107,20 +128,30 @@ function onTouchEnd(event) {
 }
 
 function openSurprise() {
+  playUiSound('giftOpen')
   rememberFocus()
   surpriseOpen.value = true
 }
 
 function scrollToMemories() {
+  playUiSound('click')
   document.getElementById('memory-wall')?.scrollIntoView({ behavior: 'smooth' })
 }
 
 function closeSurprise() {
+  playUiSound('giftClose')
   surpriseOpen.value = false
   restoreFocus()
 }
 
+function selectFilter(filter) {
+  if (filter === activeFilter.value) return
+  playUiSound('click')
+  activeFilter.value = filter
+}
+
 async function saveWish() {
+  playUiSound('click')
   const text = '钦灵，愿你往后的每一天，都有樱花、星光和好消息。生日快乐！'
   try {
     await navigator.clipboard.writeText(text)
@@ -276,7 +307,7 @@ onBeforeUnmount(() => {
             type="button"
             :class="{ active: activeFilter === filter }"
             :aria-pressed="activeFilter === filter"
-            @click="activeFilter = filter"
+            @click="selectFilter(filter)"
           >{{ filter === '全部' ? '全部回忆' : filter }}</button>
         </div>
         <span>{{ visibleMemories.length }} 张回忆</span>
