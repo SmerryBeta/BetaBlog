@@ -7,7 +7,7 @@ const memories = [
   { src: asset('/gallery/memory-02.webp'), date: '2024.02.27', title: '闷骚的灵', tag: '相聚' },
   { src: asset('/gallery/memory-03.webp'), date: '2024.03.10', title: '躺平拉拉', tag: '日常' },
   { src: asset('/gallery/memory-04.webp'), date: '2024.03.10', title: '月光与晚风', tag: '风景' },
-  { src: asset('/gallery/memory-05.webp'), date: '2024.03.13', title: '就这样温柔的靠着我', tag: '日常' },
+  { src: asset('/gallery/memory-05.webp'), date: '2024.03.13', title: '就这样温柔的靠着我 =￣ω￣=', tag: '日常' },
   { src: asset('/gallery/memory-06.webp'), date: '2024.03.14', title: '哦我的天', tag: '相聚' },
   { src: asset('/gallery/memory-07.webp'), date: '2024.03.14', title: '看你', tag: '风景' },
   { src: asset('/gallery/memory-08.webp'), date: '2024.03.14', title: '雄姿英发', tag: '风景' },
@@ -59,7 +59,7 @@ const uiSounds = {
   wood: new Audio(asset('/gallery/sounds/ui-wood-click.mp3')),
   turn: new Audio(asset('/gallery/sounds/ui-turn.mp3')),
   fireworks: new Audio(asset('/gallery/sounds/ui-fireworks.mp3')),
-  giftClose: new Audio(asset('/gallery/sounds/ui-gift-close.mp3')),
+  giftClose: new Audio(asset('/gallery/sounds/ui-leather-off.mp3')),
 }
 
 function playUiSound(name) {
@@ -169,7 +169,7 @@ function selectFilter(filter) {
 
 async function saveWish() {
   playUiSound('click')
-  const text = '钦灵，愿你往后的每一天，都有樱花、星光和好消息。生日快乐！'
+  const text = '钦灵，即使我们不会再一起玩了，但是我还是愿你往后的每一天，都能舒舒服服的奖励自己的身体，做自己喜欢的事情。在研究生的这几年里，能收获一个爱你的对象，每天都能收获美好的陪伴，做事都顺顺利利。嗯..就酱紫，生日快乐啦~ 小灵灵；我永远都记得那句“你这个reload指令”哈哈哈，感谢你教我插件哈~ 客观上来说，你真真切切的改变了我，谢谢你呀。'
   try {
     await navigator.clipboard.writeText(text)
     toast.value = '这句祝福已经复制好啦'
@@ -270,8 +270,8 @@ onBeforeUnmount(() => {
           <span class="birthday-date">11 · 09</span>
         </div>
         <p class="handwritten">A little birthday archive, made with love.</p>
-        <h1 id="birthday-title">樱花落下时，<br><em>钦灵，生日快乐</em></h1>
-        <p class="hero-intro">把一起看过的风景、笑过的瞬间，都夹进这本春日手账。新的一岁，也要被温柔和好消息包围。</p>
+        <h1 id="birthday-title">立冬之时，<br><em>钦灵，生日快乐</em></h1>
+        <p class="hero-intro">把一起看过的风景、笑过的瞬间，都夹进这本冬日手账。新的一岁，也要被温柔和好消息包围。</p>
         <div class="hero-actions">
           <button class="pill-button primary-button" type="button" @click="openSurprise">
             <span aria-hidden="true">✦</span> 拆开生日惊喜
@@ -425,7 +425,7 @@ onBeforeUnmount(() => {
             <img :src="asset('/gallery/birthday-surprise.gif')" alt="白发猫耳少女捧着生日蛋糕，送来生日快乐祝福">
           </div>
           <h2 id="surprise-title">钦灵，你的生日惊喜到啦！</h2>
-          <p>蛋糕上的烛光、樱花下的约定，还有这句最郑重的祝福：<br><strong>愿你所求皆如愿，所行皆坦途。</strong></p>
+          <p>蛋糕上的烛光、交织着三年的回忆，还有这句最郑重的祝福：<br><strong>愿你所求皆如愿，所行皆坦途。</strong></p>
           <span class="surprise-date">11 · 09 &nbsp; HAPPY BIRTHDAY</span>
           <span class="gold-sparkle surprise-sparkle" aria-hidden="true"></span>
         </div>
