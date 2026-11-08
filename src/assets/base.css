@@ -13,6 +13,13 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
+/* 图片与标题禁止拖拽、禁止选中 */
+img, h1, h2, h3, h4 {
+  -webkit-user-drag: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
 body {
   font-family: "YouYuan", "幼圆", "PingFang SC", "Microsoft YaHei", sans-serif;
   background-color: var(--paper);
@@ -46,12 +53,11 @@ a:hover { text-decoration: underline; }
 .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 18px; color: var(--ink); }
 .logo:hover { text-decoration: none; }
 .logo-mark {
-  width: 15px;
-  height: 15px;
-  background: var(--red);
-  border-radius: 5px;
-  transform: rotate(-8deg);
-  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.08);
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  object-fit: cover;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.18));
 }
 nav { display: flex; gap: 20px; font-size: 14px; }
 nav a { color: var(--ink-soft); }
@@ -227,4 +233,150 @@ main { flex: 1; padding: 48px 0 72px; }
   .birthday-entry-flower { font-size: 27px; }
   .birthday-entry strong { font-size: 15px; }
   .birthday-entry > b { display: none; }
+}
+
+/* 黑魔仙主页：整页暗夜魔法背景 */
+.layout-heimo {
+  position: relative;
+  background: linear-gradient(180deg, #241040 0%, #180a2e 42%, #0e051d 100%);
+}
+.layout-heimo main { position: relative; z-index: 1; }
+.heimo-sky {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.heimo-sky .heimo-photo {
+  position: absolute;
+  inset: -18px 0;
+  background:
+    linear-gradient(90deg, rgba(14, 5, 29, 0.55) 0%, rgba(14, 5, 29, 0.15) 34%, transparent 55%),
+    linear-gradient(180deg, rgba(14, 5, 29, 0.62) 0%, rgba(20, 8, 40, 0.22) 32%, rgba(20, 8, 40, 0.3) 62%, rgba(10, 4, 22, 0.68) 100%),
+    url(/heimo-bg.webp) 40% 30% / cover no-repeat;
+  filter: brightness(0.72) saturate(1.05);
+  animation: photo-float 4s ease-in-out infinite alternate;
+}
+@keyframes photo-float {
+  from { transform: translateY(-0px); }
+  to { transform: translateY(20px); }
+}
+.heimo-sky .stars {
+  position: absolute;
+  inset: -70px;
+}
+.heimo-sky .stars-1 {
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.6) 1px, transparent 1.4px);
+  background-size: 175px 165px;
+  background-position: 14px 10px;
+  animation: star-twinkle 4.6s ease-in-out infinite, star-drift 75s ease-in-out infinite alternate;
+}
+.heimo-sky .stars-2 {
+  background-image: radial-gradient(circle, rgba(233, 213, 255, 0.45) 1px, transparent 1.3px);
+  background-size: 118px 134px;
+  background-position: 60px 48px;
+  animation: star-twinkle 6.3s ease-in-out -2.4s infinite, star-drift 95s ease-in-out -30s infinite alternate-reverse;
+}
+.heimo-sky .stars-3 {
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.75) 1.3px, transparent 1.9px);
+  background-size: 280px 240px;
+  background-position: 100px 90px;
+  animation: star-twinkle 8.4s ease-in-out -4.8s infinite, star-drift 120s ease-in-out -60s infinite alternate;
+}
+@keyframes star-twinkle {
+  0%, 100% { opacity: 0.25; }
+  50% { opacity: 0.95; }
+}
+@keyframes star-drift {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-46px, 26px, 0); }
+}
+.heimo-sky .storm {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(52px);
+  opacity: 0.5;
+  mix-blend-mode: screen;
+}
+.heimo-sky .storm-a { width: 560px; height: 560px; left: -160px; top: -180px; background: radial-gradient(circle, #6d28d9, transparent 66%); animation: storm-drift 17s ease-in-out infinite alternate; }
+.heimo-sky .storm-b { width: 500px; height: 500px; right: -150px; bottom: -190px; background: radial-gradient(circle, #a21caf, transparent 66%); animation: storm-drift 23s ease-in-out infinite alternate-reverse; }
+@keyframes storm-drift {
+  from { transform: translate(0, 0) scale(1); }
+  to { transform: translate(70px, 38px) scale(1.16); }
+}
+.heimo-sky .flash {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(202deg, rgba(238, 228, 255, 0.6) 0%, rgba(196, 132, 252, 0.28) 40%, transparent 76%);
+  opacity: 0;
+}
+.heimo-sky .flash-a { animation: storm-flash 7.6s linear infinite; animation-delay: -1.8s; }
+.heimo-sky .flash-b { animation: storm-flash 11.7s linear infinite; animation-delay: -7.3s; }
+@keyframes storm-flash {
+  0%, 86.5%, 94%, 100% { opacity: 0; }
+  87.5% { opacity: 0.9; }
+  88.5% { opacity: 0.12; }
+  90% { opacity: 0.55; }
+  91.5% { opacity: 0.08; }
+  92.5% { opacity: 0.3; }
+}
+.heimo-sky .bolt {
+  position: absolute;
+  fill: #fff;
+  filter: drop-shadow(0 0 6px rgba(233, 213, 255, 0.95)) drop-shadow(0 0 20px rgba(147, 51, 234, 0.85));
+  opacity: 0;
+}
+.heimo-sky .bolt-a { width: 58px; left: 7%; top: 5%; transform: rotate(13deg); animation: bolt-flash 7.6s linear infinite; animation-delay: -1.8s; }
+.heimo-sky .bolt-b { width: 40px; right: 27%; top: 9%; transform: rotate(-11deg) scaleY(0.88); animation: bolt-flash 11.7s linear infinite; animation-delay: -7.3s; }
+@keyframes bolt-flash {
+  0%, 86.8%, 93.6%, 100% { opacity: 0; }
+  87.4% { opacity: 1; }
+  88.4% { opacity: 0.1; }
+  89.8% { opacity: 0.85; }
+  91.2% { opacity: 0.05; }
+  92.2% { opacity: 0.5; }
+}
+
+.layout-heimo .site-header {
+  background: rgba(16, 7, 32, 0.82);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(196, 181, 253, 0.18);
+}
+.layout-heimo .logo { color: #e9d5ff; text-shadow: 0 0 12px rgba(192, 132, 252, 0.5); }
+.layout-heimo .logo-mark { filter: drop-shadow(0 0 9px rgba(192, 132, 252, 0.8)); }
+.layout-heimo nav a { color: #a893cf; }
+.layout-heimo nav a.router-link-active { color: #d0a2fb; text-shadow: 0 0 10px rgba(192, 132, 252, 0.55); }
+.layout-heimo .site-footer {
+  background: rgba(12, 5, 26, 0.85);
+  border-top: 1px solid rgba(196, 181, 253, 0.16);
+  color: #8f7bb8;
+}
+.layout-heimo .post-card {
+  background: rgba(30, 16, 54, 0.62);
+  border-color: rgba(196, 181, 253, 0.22);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(7px);
+}
+.layout-heimo .post-card:hover {
+  border-color: rgba(216, 180, 254, 0.45);
+  box-shadow: 0 14px 36px rgba(124, 58, 237, 0.42);
+}
+.layout-heimo .post-card h2 { color: #f1e9ff; }
+.layout-heimo .post-date { color: #8f7bb8; }
+.layout-heimo .tag {
+  background: rgba(192, 132, 252, 0.2);
+  color: #e9d5ff;
+  box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.25);
+}
+.layout-heimo .post-excerpt { color: #b3a4d6; }
+.layout-heimo .empty { color: #a893cf; }
+
+@media (max-width: 640px) {
+  .heimo-sky .bolt-b { right: 8%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .heimo-sky .storm-a, .heimo-sky .storm-b, .heimo-sky .flash-a, .heimo-sky .flash-b, .heimo-sky .bolt-a, .heimo-sky .bolt-b, .heimo-sky .heimo-photo { animation: none; }
+  .heimo-sky .flash, .heimo-sky .bolt { opacity: 0 !important; }
+  .heimo-sky .stars { animation: none; opacity: 0.6; }
 }
