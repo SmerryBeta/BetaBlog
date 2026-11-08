@@ -1,36 +1,37 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { asset } from '../site.js'
 
 const memories = [
-  { src: '/gallery/memory-01.webp', date: '2024.02.09', title: '我们', tag: '相聚' },
-  { src: '/gallery/memory-02.webp', date: '2024.02.27', title: '闷骚的灵', tag: '相聚' },
-  { src: '/gallery/memory-03.webp', date: '2024.03.10', title: '躺平拉拉', tag: '日常' },
-  { src: '/gallery/memory-04.webp', date: '2024.03.10', title: '月光与晚风', tag: '风景' },
-  { src: '/gallery/memory-05.webp', date: '2024.03.13', title: '就这样温柔的靠着我', tag: '日常' },
-  { src: '/gallery/memory-06.webp', date: '2024.03.14', title: '哦我的天', tag: '相聚' },
-  { src: '/gallery/memory-07.webp', date: '2024.03.14', title: '看你', tag: '风景' },
-  { src: '/gallery/memory-08.webp', date: '2024.03.14', title: '雄姿英发', tag: '风景' },
-  { src: '/gallery/memory-09.webp', date: '2024.03.24', title: '大狗瞪小狗', tag: '日常' },
-  { src: '/gallery/memory-10.webp', date: '2024.03.24', title: '夜色里的“小英雄”', tag: '风景' },
-  { src: '/gallery/memory-11.webp', date: '2024.05.18', title: '你送我的祝福，我还记得', tag: '相聚' },
-  { src: '/gallery/memory-12.webp', date: '2024.05.24', title: '最忙三人组', tag: '相聚' },
-  { src: '/gallery/memory-13.webp', date: '2024.05.31', title: '星光落在钦灵の草窝', tag: '风景' },
-  { src: '/gallery/memory-14.webp', date: '2024.05.31', title: '别打我啦 ￣へ￣', tag: '日常' },
-  { src: '/gallery/memory-15.webp', date: '2024.06.21', title: '一起去看星星', tag: '风景' },
-  { src: '/gallery/memory-16.webp', date: '2024.07.11', title: '晴空下的我们', tag: '相聚' },
-  { src: '/gallery/memory-17.webp', date: '2024.10.01', title: '兰州云合影的三小只特写', tag: '相聚' },
-  { src: '/gallery/memory-18.webp', date: '2024.10.10', title: '我的武器太弱小', tag: '日常' },
-  { src: '/gallery/memory-19.webp', date: '2024.10.12', title: '我是媒婆~', tag: '日常' },
-  { src: '/gallery/memory-20.webp', date: '2024.10.12', title: '搭小jio~', tag: '日常' },
-  { src: '/gallery/memory-21.webp', date: '2024.10.14', title: '看着正在设计豌豆射手的你', tag: '风景' },
-  { src: '/gallery/memory-22.webp', date: '2024.10.19', title: '植物们排排站', tag: '风景' },
-  { src: '/gallery/memory-23.webp', date: '2024.12.08', title: '我的肚子是什么味道', tag: '日常' },
-  { src: '/gallery/memory-24.webp', date: '2024.12.08', title: '软软的小狗灵', tag: '日常' },
-  { src: '/gallery/memory-25.webp', date: '2025.01.01', title: '一起走进 2025', tag: '相聚' },
-  { src: '/gallery/memory-27.webp', date: '2026.07.07', title: '我是僵尸，我要吃牢灵', tag: '日常' },
-  { src: '/gallery/memory-28.webp', date: '2026.08.10', title: '召唤小狗！', tag: '日常' },
-  { src: '/gallery/memory-26.webp', date: '2026.08.18', title: '钦灵养的小杯杯', tag: '相聚' }, // 这里顺序换了一些
-  { src: '/gallery/memory-29.webp', date: '2026.08.18', title: '《灭世魔狼钦灵》', tag: '日常' },
+  { src: asset('/gallery/memory-01.webp'), date: '2024.02.09', title: '我们', tag: '相聚' },
+  { src: asset('/gallery/memory-02.webp'), date: '2024.02.27', title: '闷骚的灵', tag: '相聚' },
+  { src: asset('/gallery/memory-03.webp'), date: '2024.03.10', title: '躺平拉拉', tag: '日常' },
+  { src: asset('/gallery/memory-04.webp'), date: '2024.03.10', title: '月光与晚风', tag: '风景' },
+  { src: asset('/gallery/memory-05.webp'), date: '2024.03.13', title: '就这样温柔的靠着我', tag: '日常' },
+  { src: asset('/gallery/memory-06.webp'), date: '2024.03.14', title: '哦我的天', tag: '相聚' },
+  { src: asset('/gallery/memory-07.webp'), date: '2024.03.14', title: '看你', tag: '风景' },
+  { src: asset('/gallery/memory-08.webp'), date: '2024.03.14', title: '雄姿英发', tag: '风景' },
+  { src: asset('/gallery/memory-09.webp'), date: '2024.03.24', title: '大狗瞪小狗', tag: '日常' },
+  { src: asset('/gallery/memory-10.webp'), date: '2024.03.24', title: '夜色里的“小英雄”', tag: '风景' },
+  { src: asset('/gallery/memory-11.webp'), date: '2024.05.18', title: '你送我的祝福，我还记得', tag: '相聚' },
+  { src: asset('/gallery/memory-12.webp'), date: '2024.05.24', title: '最忙三人组', tag: '相聚' },
+  { src: asset('/gallery/memory-13.webp'), date: '2024.05.31', title: '星光落在钦灵の草窝', tag: '风景' },
+  { src: asset('/gallery/memory-14.webp'), date: '2024.05.31', title: '别打我啦 ￣へ￣', tag: '日常' },
+  { src: asset('/gallery/memory-15.webp'), date: '2024.06.21', title: '一起去看星星', tag: '风景' },
+  { src: asset('/gallery/memory-16.webp'), date: '2024.07.11', title: '晴空下的我们', tag: '相聚' },
+  { src: asset('/gallery/memory-17.webp'), date: '2024.10.01', title: '兰州云合影的三小只特写', tag: '相聚' },
+  { src: asset('/gallery/memory-18.webp'), date: '2024.10.10', title: '我的武器太弱小', tag: '日常' },
+  { src: asset('/gallery/memory-19.webp'), date: '2024.10.12', title: '我是媒婆~', tag: '日常' },
+  { src: asset('/gallery/memory-20.webp'), date: '2024.10.12', title: '搭小jio~', tag: '日常' },
+  { src: asset('/gallery/memory-21.webp'), date: '2024.10.14', title: '看着正在设计豌豆射手的你', tag: '风景' },
+  { src: asset('/gallery/memory-22.webp'), date: '2024.10.19', title: '植物们排排站', tag: '风景' },
+  { src: asset('/gallery/memory-23.webp'), date: '2024.12.08', title: '我的肚子是什么味道', tag: '日常' },
+  { src: asset('/gallery/memory-24.webp'), date: '2024.12.08', title: '软软的小狗灵', tag: '日常' },
+  { src: asset('/gallery/memory-25.webp'), date: '2025.01.01', title: '一起走进 2025', tag: '相聚' },
+  { src: asset('/gallery/memory-27.webp'), date: '2026.07.07', title: '我是僵尸，我要吃牢灵', tag: '日常' },
+  { src: asset('/gallery/memory-28.webp'), date: '2026.08.10', title: '召唤小狗！', tag: '日常' },
+  { src: asset('/gallery/memory-26.webp'), date: '2026.08.18', title: '钦灵养的小杯杯', tag: '相聚' }, // 这里顺序换了一些
+  { src: asset('/gallery/memory-29.webp'), date: '2026.08.18', title: '《灭世魔狼钦灵》', tag: '日常' },
 ]
 
 const petals = [
@@ -53,12 +54,12 @@ let previousFocus
 let musicWanted = true
 
 const uiSounds = {
-  click: new Audio('/gallery/sounds/ui-click.mp3'),
-  pop: new Audio('/gallery/sounds/ui-pop.mp3'),
-  wood: new Audio('/gallery/sounds/ui-wood-click.mp3'),
-  turn: new Audio('/gallery/sounds/ui-turn.mp3'),
-  fireworks: new Audio('/gallery/sounds/ui-fireworks.mp3'),
-  giftClose: new Audio('/gallery/sounds/ui-gift-close.mp3'),
+  click: new Audio(asset('/gallery/sounds/ui-click.mp3')),
+  pop: new Audio(asset('/gallery/sounds/ui-pop.mp3')),
+  wood: new Audio(asset('/gallery/sounds/ui-wood-click.mp3')),
+  turn: new Audio(asset('/gallery/sounds/ui-turn.mp3')),
+  fireworks: new Audio(asset('/gallery/sounds/ui-fireworks.mp3')),
+  giftClose: new Audio(asset('/gallery/sounds/ui-gift-close.mp3')),
 }
 
 function playUiSound(name) {
@@ -230,7 +231,7 @@ onBeforeUnmount(() => {
     <header class="birthday-nav">
       <div class="birthday-shell nav-inner">
         <router-link to="/birthday" class="birthday-brand" aria-label="钦灵的生日手账首页">
-          <img src="/gallery/qingling-avatar.webp" alt="钦灵的头像">
+          <img :src="asset('/gallery/qingling-avatar.webp')" alt="钦灵的头像">
           <span><b>钦灵的生日手账</b><small>QINGLING'S LITTLE ALBUM</small></span>
         </router-link>
         <button
@@ -242,7 +243,7 @@ onBeforeUnmount(() => {
           @click="toggleMusic"
         >
           <span class="vinyl-wrap" aria-hidden="true">
-            <span class="vinyl-record"><img src="/gallery/qingling-avatar.webp" alt=""></span>
+            <span class="vinyl-record"><img :src="asset('/gallery/qingling-avatar.webp')" alt=""></span>
             <span class="tonearm"></span>
           </span>
           <span class="music-meta"><b>那个夏天</b><small>{{ isMusicPlaying ? '正在播放' : '点击播放' }} · 久石让</small></span>
@@ -253,7 +254,7 @@ onBeforeUnmount(() => {
         </nav>
       </div>
     </header>
-    <audio ref="musicAudio" src="/gallery/one-summers-day.mp3" preload="auto" loop @play="isMusicPlaying = true" @pause="isMusicPlaying = false"></audio>
+    <audio ref="musicAudio" :src="asset('/gallery/one-summers-day.mp3')" preload="auto" loop @play="isMusicPlaying = true" @pause="isMusicPlaying = false"></audio>
     <span
       v-for="(petal, index) in petals"
       :key="index"
@@ -265,7 +266,7 @@ onBeforeUnmount(() => {
     <section class="birthday-hero birthday-shell" aria-labelledby="birthday-title">
       <div class="hero-copy">
         <div class="recipient-line">
-          <div class="recipient-chip"><img src="/gallery/qingling-avatar.webp" alt="钦灵"><span><small>今天的主角</small><b>钦灵</b></span></div>
+          <div class="recipient-chip"><img :src="asset('/gallery/qingling-avatar.webp')" alt="钦灵"><span><small>今天的主角</small><b>钦灵</b></span></div>
           <span class="birthday-date">11 · 09</span>
         </div>
         <p class="handwritten">A little birthday archive, made with love.</p>
@@ -283,13 +284,13 @@ onBeforeUnmount(() => {
       <div class="hero-scrapbook">
         <span class="tape tape-top" aria-hidden="true"></span>
         <button class="main-photo" type="button" @click="openImage(memories[0])" aria-label="放大查看樱花树下的相聚">
-          <img src="/gallery/memory-01.webp" alt="樱花与彩灯装点的生日场景中，大家聚在一起合影">
+          <img :src="asset('/gallery/memory-01.webp')" alt="樱花与彩灯装点的生日场景中，大家聚在一起合影">
           <span class="photo-caption"><b>樱花盛开的那一页</b><small>our little wonderful world</small></span>
         </button>
         <span class="gold-sparkle sparkle-one" aria-hidden="true"></span>
         <span class="gold-sparkle sparkle-two" aria-hidden="true"></span>
         <button class="gif-teaser" type="button" @click="openSurprise" aria-label="打开白发猫耳少女的生日惊喜动画">
-          <img src="/gallery/birthday-surprise-poster.webp" alt="生日惊喜动画的静态封面">
+          <img :src="asset('/gallery/birthday-surprise-poster.webp')" alt="生日惊喜动画的静态封面">
           <span>藏着一个小惊喜 <b>点我拆开</b></span>
         </button>
       </div>
@@ -362,7 +363,7 @@ onBeforeUnmount(() => {
           <p>你看我这几个月你在忙的时候，你不是一直没空理我嘛，就跟你闹了几次矛盾，唉...</p>
           <figure class="letter-photo tiny">
             <span class="photo-tape" aria-hidden="true"></span>
-            <img src="/gallery/huggy.webp" alt="跟你和解后的第一个抱，太喜欢了！" loading="lazy">
+            <img :src="asset('/gallery/huggy.webp')" alt="跟你和解后的第一个抱，太喜欢了！" loading="lazy">
             <figcaption>跟你和解后的第一个抱，太喜欢了！</figcaption>
           </figure>
           <p>或许Lingchat真的有某种神奇的意义呢..现在的人们都太寂寞了，我那边也有猛兽的群聊，天天都跟他们聊天，但是永远都没有那种亲密的感觉，现代的AI或许能带来这项情感上的陪伴，我从45那边听说了你受到了企业的邀请，恭喜你呀！</p>
@@ -374,7 +375,7 @@ onBeforeUnmount(() => {
           <p>但是呢！如果以后还有什么MC联机的活动的话，一起玩吧！哈哈，你看我暑假还设计了一台一个游戏日180w的游戏币的超级生产资料，成功拿下了1e财富的任务，拿下了创造马达</p>
           <figure class="letter-photo narrow">
             <span class="photo-tape" aria-hidden="true"></span>
-            <img src="/gallery/letter-dolls.webp" alt="钦灵和我的棉花娃娃依偎在一起，身后是写给你的生日贺卡" loading="lazy">
+            <img :src="asset('/gallery/letter-dolls.webp')" alt="钦灵和我的棉花娃娃依偎在一起，身后是写给你的生日贺卡" loading="lazy">
             <figcaption>两个小家伙已经约好了，下次一起玩</figcaption>
           </figure>
           <p>记得2024年的暑假，应该是我们在一起玩最快乐的一段时光了，一起聊天一起拍五周年，不过呢..未来是未知的，永远都不知道什么时候才会像当年那样在一起玩，就像这首歌，那个暑假..也将永远定格在回忆里了</p>
@@ -383,7 +384,7 @@ onBeforeUnmount(() => {
           <p>小兔子玩偶，你送我的，香香的软软的真可爱！快看：</p>
           <figure class="letter-photo">
             <span class="photo-tape" aria-hidden="true"></span>
-            <img src="/gallery/letter-bunny.webp" alt="你送我的小兔子玩偶，正坐在屏幕前看我们的回忆相册" loading="lazy">
+            <img :src="asset('/gallery/letter-bunny.webp')" alt="你送我的小兔子玩偶，正坐在屏幕前看我们的回忆相册" loading="lazy">
             <figcaption>它呀，正盯着屏幕里我们的回忆看呢</figcaption>
           </figure>
           <div class="letter-signature">—— SmerryBeta <span>♡</span></div>
@@ -396,7 +397,7 @@ onBeforeUnmount(() => {
     </section>
 
     <footer class="birthday-footer">
-      <img src="/gallery/qingling-avatar.webp" alt="">
+      <img :src="asset('/gallery/qingling-avatar.webp')" alt="">
       <p>光阴易逝，往事铭心。</p>
       <span>这本小小的手账，送给独一无二的小骚灵。</span>
     </footer>
@@ -421,7 +422,7 @@ onBeforeUnmount(() => {
           <button ref="surpriseClose" class="surprise-close" type="button" aria-label="关闭生日惊喜" @click="closeSurprise">×</button>
           <span class="section-ribbon">SPECIAL FOR YOU</span>
           <div class="animation-frame">
-            <img src="/gallery/birthday-surprise.gif" alt="白发猫耳少女捧着生日蛋糕，送来生日快乐祝福">
+            <img :src="asset('/gallery/birthday-surprise.gif')" alt="白发猫耳少女捧着生日蛋糕，送来生日快乐祝福">
           </div>
           <h2 id="surprise-title">钦灵，你的生日惊喜到啦！</h2>
           <p>蛋糕上的烛光、樱花下的约定，还有这句最郑重的祝福：<br><strong>愿你所求皆如愿，所行皆坦途。</strong></p>

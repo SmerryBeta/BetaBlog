@@ -1,24 +1,53 @@
 <script setup>
 import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { onBeforeRouteLeave } from 'vue-router'
 import posts from '../posts/index.js'
-import site from '../site.js'
+import site, { asset } from '../site.js'
 
 // 0~24.75s 是变身前奏，之后每 57.63s 循环一次，播完回到循环起点
 const LOOP_START = 24.75
+const FADE_MS = 700
+// 与 base.css 路由淡出时长(0.26s)同步，让音乐随旧页面一起退场
+const PAGE_FADE_MS = 260
 
 const musicAudio = ref(null)
 const isMusicPlaying = ref(false)
 let musicWanted = true
+let fadeTimer = 0
 
 function excerpt(body) {
   return body.replace(/[#>*`~\-\[\]()!]/g, '').replace(/\s+/g, ' ').trim().slice(0, 90)
 }
 
+function fadeMusic(target, done, ms = FADE_MS) {
+  clearInterval(fadeTimer)
+  const audio = musicAudio.value
+  const from = audio.volume
+  const start = performance.now()
+  fadeTimer = setInterval(() => {
+    const p = Math.min(1, Math.max(0, (performance.now() - start) / ms))
+    audio.volume = from + (target - from) * p
+    if (p >= 1) {
+      clearInterval(fadeTimer)
+      fadeTimer = 0
+      done?.()
+    }
+  }, 40)
+}
+
 async function startMusic() {
+  const audio = musicAudio.value
   try {
-    await musicAudio.value.play()
+    if (audio.paused) audio.volume = 0
+    fadeMusic(1)
+    if (!audio.paused) isMusicPlaying.value = true
+    await audio.play()
     return true
   } catch {
+    if (audio.paused) {
+      clearInterval(fadeTimer)
+      audio.volume = 0
+    }
     return false
   }
 }
@@ -34,9 +63,10 @@ async function unlockMusic(event) {
 }
 
 async function toggleMusic() {
-  if (isMusicPlaying.value) {
+  if (musicWanted) {
     musicWanted = false
-    musicAudio.value.pause()
+    isMusicPlaying.value = false
+    fadeMusic(0, () => musicAudio.value.pause())
     removeMusicUnlock()
     return
   }
@@ -49,6 +79,11 @@ function onAudioEnded() {
   musicAudio.value.play().catch(() => {})
 }
 
+onBeforeRouteLeave(() => {
+  const audio = musicAudio.value
+  if (audio && !audio.paused) fadeMusic(0, () => audio.pause(), PAGE_FADE_MS)
+})
+
 onMounted(async () => {
   if (!await startMusic()) {
     document.addEventListener('pointerdown', unlockMusic)
@@ -58,56 +93,57 @@ onMounted(async () => {
 
 onBeforeUnmount(() => {
   removeMusicUnlock()
-  musicAudio.value?.pause()
 })
 </script>
 
 <template>
-  <section class="heimo-hero">
-    <span class="magic-sparkle ms1" aria-hidden="true"></span>
-    <span class="magic-sparkle ms2" aria-hidden="true"></span>
-    <span class="magic-sparkle ms3" aria-hidden="true"></span>
-    <div class="heimo-copy">
-      <span class="heimo-badge">古娜拉黑暗之神 · 呜呼啦呼 · 黑魔变身！</span>
-      <h1>{{ site.name }}</h1>
-      <p class="heimo-spell">黑魔仙的魔法小册子 · 持续装订中</p>
-      <p class="heimo-intro">{{ site.intro }}</p>
-    </div>
-    <div class="heimo-avatar">
-      <span class="avatar-ring" aria-hidden="true"></span>
-      <img src="/smerry-avatar.webp" alt="站长 SmerryBeta 的头像">
-      <span class="avatar-badge" aria-hidden="true"><img src="/heimo-box.webp" alt=""></span>
-      <span class="avatar-chip"><small>中二病晚期</small><b>{{ site.owner }}</b></span>
-    </div>
-  </section>
-  <section class="post-list">
-    <router-link
-      v-for="p in posts"
-      :key="p.slug"
-      :to="'/post/' + p.slug"
-      class="post-card"
-    >
-      <div class="post-meta">
-        <span class="post-date">{{ p.date }}</span>
-        <span v-for="t in p.tags" :key="t" class="tag">{{ t }}</span>
+  <div class="home-page">
+    <section class="heimo-hero">
+      <span class="magic-sparkle ms1" aria-hidden="true"></span>
+      <span class="magic-sparkle ms2" aria-hidden="true"></span>
+      <span class="magic-sparkle ms3" aria-hidden="true"></span>
+      <div class="heimo-copy">
+        <span class="heimo-badge">古娜拉黑暗之神 · 呜呼啦呼 · 黑魔变身</span>
+        <h1>{{ site.name }}</h1>
+        <p class="heimo-spell">黑魔仙的魔法小册子 · 持续装订中</p>
+        <p class="heimo-intro">{{ site.intro }}</p>
       </div>
-      <h2>{{ p.title }}</h2>
-      <p class="post-excerpt">{{ excerpt(p.body) }}……</p>
-    </router-link>
-    <p v-if="!posts.length" class="empty">还没有文章，去 src/posts 里放第一篇吧</p>
-  </section>
-  <button
-    class="heimo-player"
-    :class="{ playing: isMusicPlaying }"
-    type="button"
-    :aria-label="isMusicPlaying ? '暂停背景音乐：黑魔变身' : '播放背景音乐：黑魔变身'"
-    :aria-pressed="isMusicPlaying"
-    @click="toggleMusic"
-  >
-    <span class="disc" aria-hidden="true"><img src="/smerry-avatar.webp" alt=""></span>
-    <span class="meta"><b>黑魔变身</b><small>{{ isMusicPlaying ? '正在播放 · 呜呼啦呼' : '点击播放' }}</small></span>
-  </button>
-  <audio ref="musicAudio" src="/bgm/heimo-transform.mp3" preload="auto" @play="isMusicPlaying = true" @pause="isMusicPlaying = false" @ended="onAudioEnded"></audio>
+      <div class="heimo-avatar">
+        <span class="avatar-ring" aria-hidden="true"></span>
+        <img :src="asset('/smerry-avatar.webp')" alt="站长的头像">
+        <span class="avatar-badge" aria-hidden="true"><img :src="asset('/heimo-box.webp')" alt=""></span>
+        <span class="avatar-chip"><small>中二病晚期</small><b>{{ site.owner }}</b></span>
+      </div>
+    </section>
+    <section class="post-list">
+      <router-link
+        v-for="p in posts"
+        :key="p.slug"
+        :to="'/post/' + p.slug"
+        class="post-card"
+      >
+        <div class="post-meta">
+          <span class="post-date">{{ p.date }}</span>
+          <span v-for="t in p.tags" :key="t" class="tag">{{ t }}</span>
+        </div>
+        <h2>{{ p.title }}</h2>
+        <p class="post-excerpt">{{ excerpt(p.body) }}……</p>
+      </router-link>
+      <p v-if="!posts.length" class="empty">还没有文章，去 src/posts 里放第一篇吧</p>
+    </section>
+    <button
+      class="heimo-player"
+      :class="{ playing: isMusicPlaying }"
+      type="button"
+      :aria-label="isMusicPlaying ? '暂停背景音乐：黑魔变身' : '播放背景音乐：黑魔变身'"
+      :aria-pressed="isMusicPlaying"
+      @click="toggleMusic"
+    >
+      <span class="disc" aria-hidden="true"><img :src="asset('/smerry-avatar.webp')" alt=""></span>
+      <span class="meta"><b>黑魔变身</b><small>{{ isMusicPlaying ? '正在播放 · 呜呼啦呼' : '点击播放' }}</small></span>
+    </button>
+    <audio ref="musicAudio" :src="asset('/bgm/heimo-transform.mp3')" preload="auto" @play="isMusicPlaying = true" @pause="isMusicPlaying = false" @ended="onAudioEnded"></audio>
+  </div>
 </template>
 
 <style scoped>
@@ -120,7 +156,7 @@ onBeforeUnmount(() => {
   grid-template-columns: 1.25fr 0.75fr;
   align-items: center;
   gap: 24px;
-  margin-bottom: 48px;
+  margin-bottom: 40px;
   padding: 34px 8px 8px;
 }
 .magic-sparkle {
@@ -178,7 +214,7 @@ onBeforeUnmount(() => {
   justify-self: center;
   text-align: center;
 }
-.heimo-avatar img {
+.heimo-avatar > img {
   position: relative;
   z-index: 1;
   display: block;
@@ -219,7 +255,7 @@ onBeforeUnmount(() => {
   position: absolute;
   z-index: 2;
   left: 50%;
-  bottom: -14px;
+  bottom: -40px;
   display: inline-flex;
   align-items: center;
   gap: 7px;
@@ -273,11 +309,12 @@ onBeforeUnmount(() => {
 .heimo-player.playing .meta small { color: #d0a2fb; }
 
 @media (max-width: 640px) {
-  .heimo-hero { grid-template-columns: 1fr; gap: 34px; padding: 22px 6px 4px; text-align: center; }
+  .heimo-hero { grid-template-columns: 1fr; gap: 34px; padding: 22px 6px 44px; text-align: center; }
   .heimo-copy h1 { font-size: clamp(30px, 9vw, 40px); }
-  .heimo-avatar img { width: 156px; height: 156px; }
-  .avatar-badge { right: -9px; bottom: -4px; }
+  .heimo-avatar > img { width: 156px; height: 156px; }
   .avatar-badge img { width: 44px; }
+  /* 名字胶囊下沉避开右下角的黑魔盒（徽章位置与桌面端一致） */
+  .avatar-chip { bottom: -40px; }
   .heimo-player .meta { display: none; }
   .heimo-player { padding: 6px; }
 }

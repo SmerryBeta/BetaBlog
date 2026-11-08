@@ -1,5 +1,5 @@
 <script setup>
-import site from '../site.js'
+import site, { asset } from '../site.js'
 
 const demos = [
   ['birthday-paper.html', '纸艺手作风 · 生日祝福卡'],
@@ -21,7 +21,7 @@ const demos = [
       <p>三个不同风格的生日祝福小页面，点开可以玩，不过没啥好看的：</p>
       <ul>
         <li v-for="d in demos" :key="d[0]">
-          <a :href="'/demos/' + d[0]" target="_blank" rel="noopener">{{ d[1] }}</a>
+          <a :href="asset('/demos/' + d[0])" target="_blank" rel="noopener">{{ d[1] }}</a>
         </li>
       </ul>
     </div>

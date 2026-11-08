@@ -66,6 +66,15 @@ nav a.router-link-active { color: var(--red-deep); font-weight: 700; }
 main { flex: 1; padding: 48px 0 72px; }
 .main-wide { flex: 1; padding: 0; }
 
+/* 路由切换：柔和淡入淡出；时长与 router.js 里回顶延迟保持同步 */
+.page-enter-active, .page-leave-active { transition: opacity 0.26s ease, transform 0.26s ease; }
+.page-enter-from { opacity: 0; transform: translateY(10px); }
+.page-leave-to { opacity: 0; transform: translateY(-8px); }
+@media (prefers-reduced-motion: reduce) {
+  .page-enter-active, .page-leave-active { transition-property: opacity; }
+  .page-enter-from, .page-leave-to { transform: none; }
+}
+
 .hero { position: relative; margin-bottom: 40px; padding: 8px 4px; }
 .badge {
   display: inline-block;
@@ -254,7 +263,7 @@ main { flex: 1; padding: 48px 0 72px; }
   background:
     linear-gradient(90deg, rgba(14, 5, 29, 0.55) 0%, rgba(14, 5, 29, 0.15) 34%, transparent 55%),
     linear-gradient(180deg, rgba(14, 5, 29, 0.62) 0%, rgba(20, 8, 40, 0.22) 32%, rgba(20, 8, 40, 0.3) 62%, rgba(10, 4, 22, 0.68) 100%),
-    url(/heimo-bg.webp) 40% 30% / cover no-repeat;
+    url(./heimo-bg.webp) 40% 30% / cover no-repeat;
   filter: brightness(0.72) saturate(1.05);
   animation: photo-float 4s ease-in-out infinite alternate;
 }

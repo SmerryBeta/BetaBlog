@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import site from './site.js'
+import site, { asset } from './site.js'
 
 const route = useRoute()
 const isHeimo = computed(() => route.path === '/')
@@ -23,7 +23,7 @@ const isHeimo = computed(() => route.path === '/')
     </div>
     <header v-if="!$route.meta.standalone" class="site-header">
       <div class="wrap header-inner">
-        <router-link to="/" class="logo"><img class="logo-mark" src="/smerry-icon.png" alt="" aria-hidden="true">{{ site.name }}</router-link>
+        <router-link to="/" class="logo"><img class="logo-mark" :src="asset('/smerry-icon.png')" alt="" aria-hidden="true">{{ site.name }}</router-link>
         <nav>
           <router-link to="/" exact>主页</router-link>
           <router-link to="/about">关于</router-link>
@@ -31,7 +31,11 @@ const isHeimo = computed(() => route.path === '/')
       </div>
     </header>
     <main :class="$route.meta.wide ? 'main-wide' : 'wrap'">
-      <router-view />
+      <router-view v-slot="{ Component }">
+        <transition name="page" mode="out-in">
+          <component :is="Component" :key="route.path" />
+        </transition>
+      </router-view>
     </main>
     <footer v-if="!$route.meta.standalone" class="site-footer">
       <div class="wrap">&copy; {{ new Date().getFullYear() }} {{ site.owner }} &middot; 用 Vue 搭建 &middot; 托管在 GitHub Pages</div>
