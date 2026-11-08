@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>生日快乐 · 樱花生日簿</title>
+<style>
+:root{
+  --pink:#ffb7c5; --pearl:#fff5f7; --lav:#c4b5fd; --gold:#fde68a;
+  --rose:#fecdd3; --text:#4a5568; --deep:#a8445e; --deep-btn:#8c3a52;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:"YouYuan","幼圆","PingFang SC","Microsoft YaHei",sans-serif;
+  background:linear-gradient(180deg,#ffe3ea 0%,#fff5f7 34%,#ffffff 100%);
+  color:var(--text);line-height:1.85;overflow-x:hidden;
+}
+.wrap{max-width:1020px;margin:0 auto;padding:0 18px;position:relative}
+a:focus-visible,button:focus-visible{outline:2px solid var(--pink);outline-offset:3px;border-radius:999px}
+
+.nav{background:var(--pearl);border-bottom:2px solid rgba(255,183,197,.25)}
+.nav-inner{max-width:1020px;margin:0 auto;padding:15px 18px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.logo{display:flex;align-items:center;gap:9px;font-weight:700;font-size:18px;color:var(--deep);text-decoration:none}
+.nav-links{display:flex;gap:8px;font-size:13px}
+.nav-links a{color:var(--text);text-decoration:none;padding:7px 16px;border-radius:999px;transition:all .3s ease-in-out}
+.nav-links a:hover{background:#fff;color:var(--deep);box-shadow:0 2px 10px rgba(255,183,197,.35)}
+
+.hero{padding:70px 18px 90px;position:relative}
+.petal{position:absolute;border-radius:50% 0 50% 50%;pointer-events:none;opacity:.85;animation:sway 6s ease-in-out infinite alternate}
+@keyframes sway{from{transform:translateY(-6px) rotate(var(--r,20deg))}to{transform:translateY(10px) rotate(calc(var(--r,20deg) + 24deg))}}
+.spark{position:absolute;background:var(--gold);box-shadow:0 0 8px var(--gold);clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%);animation:twinkle 2.4s ease-in-out infinite;pointer-events:none}
+@keyframes twinkle{0%,100%{transform:scale(.7);opacity:.55}50%{transform:scale(1.2);opacity:1}}
+
+.panel-card{
+  position:relative;max-width:640px;margin:0 auto;text-align:center;
+  background-color:var(--pearl);
+  background-image:radial-gradient(circle,rgba(255,183,197,.3) .6px,transparent .8px);
+  background-size:10px 10px;
+  border:2px solid rgba(255,183,197,.25);border-radius:24px;
+  box-shadow:0 4px 20px rgba(255,183,197,.28);
+  padding:62px 30px 52px;
+  transition:all .3s ease-in-out;
+}
+.panel-card:hover{box-shadow:0 8px 30px rgba(255,183,197,.4)}
+.flower{position:absolute;width:30px;height:30px}
+
+.ribbon{
+  display:inline-block;background:var(--pink);color:var(--deep-btn);
+  font-size:13px;font-weight:700;letter-spacing:2px;
+  padding:7px 36px;
+  clip-path:polygon(0 50%,4% 0,96% 0,100% 50%,96% 100%,4% 100%);
+  filter:drop-shadow(0 4px 10px rgba(255,183,197,.6));
+  margin-bottom:18px;
+}
+.hero h1{font-size:clamp(38px,8vw,60px);font-weight:800;letter-spacing:3px;color:var(--deep);line-height:1.3}
+.hero-sub{font-size:15px;max-width:27em;margin:14px auto 32px}
+.hero-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+
+.btn{
+  display:inline-block;border:none;border-radius:999px;cursor:pointer;
+  font-family:inherit;font-weight:600;font-size:16px;padding:12px 32px;text-decoration:none;
+  transition:all .3s ease-in-out;
+}
+.btn-pink{background:var(--pink);color:var(--deep-btn);box-shadow:0 4px 15px rgba(255,183,197,.5)}
+.btn-pink:hover{transform:scale(1.05);box-shadow:0 8px 30px rgba(255,183,197,.55)}
+.btn-pink:active{transform:scale(.95);box-shadow:0 2px 10px rgba(255,183,197,.4)}
+.btn-lav{background:var(--lav);color:#55418a;box-shadow:0 4px 15px rgba(196,181,253,.5)}
+.btn-lav:hover{transform:scale(1.05);box-shadow:0 8px 30px rgba(196,181,253,.55)}
+.btn-lav:active{transform:scale(.95);box-shadow:0 2px 10px rgba(196,181,253,.4)}
+
+.sec{padding:70px 0;position:relative}
+.ribbon-lg{
+  display:table;margin:0 auto;background:var(--pink);color:var(--deep-btn);
+  font-size:clamp(20px,4vw,26px);font-weight:800;letter-spacing:3px;
+  padding:9px 44px;
+  clip-path:polygon(0 50%,3% 0,97% 0,100% 50%,97% 100%,3% 100%);
+  filter:drop-shadow(0 4px 12px rgba(255,183,197,.6));
+}
+.sec-sub{text-align:center;font-size:14px;color:var(--text);margin-top:14px}
+
+.stage{
+  position:relative;max-width:560px;margin:44px auto 0;text-align:center;
+  background-color:#fff;
+  background-image:radial-gradient(circle,rgba(255,183,197,.22) .6px,transparent .8px);
+  background-size:10px 10px;
+  border:2px solid rgba(255,183,197,.25);border-radius:24px;
+  box-shadow:0 4px 20px rgba(255,183,197,.25);
+  padding:46px 24px 38px;
+}
+
+.cake{width:min(290px,84%);margin:0 auto 30px;display:flex;flex-direction:column;align-items:center}
+.candles{display:flex;gap:22px;align-items:flex-end;margin-bottom:-5px;position:relative;z-index:2}
+.candle{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;padding:9px 5px 0;font-family:inherit;border-radius:999px;transition:transform .3s ease-in-out}
+.candle:hover{transform:scale(1.08)}
+.candle:active{transform:scale(.95)}
+.flame{
+  width:14px;height:18px;background:var(--gold);
+  border-radius:50% 50% 50% 50%/62% 62% 38% 38%;position:relative;
+  box-shadow:0 0 8px var(--gold);
+  transition:all .3s ease-in-out;
+  animation:flick 1.8s ease-in-out infinite;
+}
+.flame::after{content:"";position:absolute;left:4px;top:7px;width:5px;height:7px;background:#fff;opacity:.95;border-radius:50% 50% 50% 50%/62% 62% 38% 38%}
+@keyframes flick{0%,100%{transform:scale(1) rotate(-2deg)}50%{transform:scale(.94,1.08) rotate(3deg)}}
+.candle.out .flame{opacity:0;transform:scale(.4);animation:none;box-shadow:none}
+.stick{width:11px;height:44px;border-radius:999px;background:var(--c,#ffb7c5);box-shadow:inset -2px -2px 4px rgba(0,0,0,.05),inset 2px 2px 3px rgba(255,255,255,.5)}
+.cake-body{width:100%;display:flex;flex-direction:column;align-items:center}
+.layer{border-radius:999px;box-shadow:0 4px 14px rgba(255,183,197,.35),inset 0 3px 6px rgba(255,255,255,.6)}
+.layer-top{width:66%;height:46px;background:linear-gradient(#fff,#ffe3ea)}
+.layer-mid{width:83%;height:54px;background:linear-gradient(#fecdd3,#ffb7c5);margin-top:-4px}
+.layer-bot{width:100%;height:62px;background:linear-gradient(#ffb7c5,#f49cae);margin-top:-4px}
+.plate{width:calc(100% + 32px);height:20px;border-radius:999px;background:#fff;box-shadow:0 4px 14px rgba(255,183,197,.3);margin-top:-9px}
+.heart-top{position:absolute;top:-14px;width:18px;height:18px;filter:drop-shadow(0 2px 4px rgba(255,183,197,.6))}
+.hint{font-size:14px}
+.counter{
+  display:inline-block;margin-top:16px;padding:6px 22px;border-radius:999px;
+  background:#fff;border:1.5px solid rgba(255,183,197,.35);color:var(--deep-btn);font-weight:700;font-size:13px;
+  box-shadow:0 2px 10px rgba(255,183,197,.25);
+}
+
+.wish{
+  display:none;margin-top:28px;position:relative;
+  background-color:var(--pearl);
+  background-image:radial-gradient(circle,rgba(255,183,197,.3) .6px,transparent .8px);
+  background-size:10px 10px;
+  border:2px solid rgba(255,183,197,.3);border-radius:20px;
+  padding:24px 18px 22px;
+  box-shadow:0 4px 20px rgba(255,183,197,.3);
+}
+.wish.on{display:block;animation:appear .35s ease-in-out}
+@keyframes appear{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
+.wish-text{font-size:17px;font-weight:800;color:var(--deep);margin-bottom:16px}
+
+.letter{
+  position:relative;max-width:640px;margin:46px auto 0;
+  background:#fff;border:2px solid rgba(255,183,197,.25);border-radius:20px;
+  box-shadow:0 4px 20px rgba(255,183,197,.25);
+  padding:36px 26px 30px;text-align:left;
+}
+.lace{position:absolute;left:26px;right:26px;height:10px;pointer-events:none}
+.lace-up{top:-9px;background-image:radial-gradient(circle at 11px 10px,var(--rose) 5px,transparent 5.5px);background-size:22px 10px;background-repeat:repeat-x}
+.lace-down{bottom:-9px;background-image:radial-gradient(circle at 11px 0px,var(--rose) 5px,transparent 5.5px);background-size:22px 10px;background-repeat:repeat-x}
+.fields{display:grid;grid-template-columns:1fr 2fr;gap:14px;margin-bottom:18px}
+label{display:block;font-size:13px;font-weight:700;margin-bottom:6px;color:var(--text)}
+.input{
+  width:100%;border:1.5px solid rgba(255,183,197,.35);border-radius:999px;
+  background:var(--pearl);padding:11px 18px;font-family:inherit;font-size:15px;color:var(--text);
+  transition:all .3s ease-in-out;
+}
+.input::placeholder{color:rgba(74,85,104,.4)}
+.input:focus{outline:none;border-color:var(--pink);box-shadow:0 0 12px rgba(255,183,197,.45)}
+
+.notes{display:grid;grid-template-columns:repeat(12,1fr);gap:20px;max-width:980px;margin:50px auto 0}
+.note{
+  position:relative;grid-column:span 7;
+  background-color:var(--pearl);
+  background-image:radial-gradient(circle,rgba(255,183,197,.2) .6px,transparent .8px);
+  background-size:10px 10px;
+  border:2px solid rgba(255,183,197,.28);border-radius:16px;
+  padding:34px 22px 16px;color:var(--text);
+  box-shadow:0 4px 15px rgba(255,183,197,.25);
+  transition:all .3s ease-in-out;
+}
+.notes .note:nth-child(4n+2){grid-column:span 5}
+.notes .note:nth-child(4n+3){grid-column:span 5}
+.notes .note:nth-child(4n+4){grid-column:span 7}
+.note:hover{transform:scale(1.03);box-shadow:0 8px 30px rgba(255,183,197,.4)}
+.note.new{animation:appear .35s ease-in-out}
+.seal{
+  position:absolute;top:-13px;left:50%;transform:translateX(-50%);
+  width:28px;height:28px;border-radius:50%;background:var(--gold);
+  box-shadow:0 0 8px rgba(253,230,138,.8);
+  display:flex;align-items:center;justify-content:center;
+}
+.note-msg{font-size:15px}
+.note-name{margin-top:12px;font-size:12px;text-align:right;color:rgba(74,85,104,.55)}
+
+footer{background:#fff;padding:44px 18px;text-align:center;font-size:13px;color:var(--text)}
+footer svg{display:block;margin:0 auto 8px}
+
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:80}
+.piece{position:absolute;animation:burst var(--t,1.4s) ease-in-out forwards}
+.piece.petal-p{border-radius:50% 0 50% 50%}
+.piece.spark-p{background:var(--gold);box-shadow:0 0 8px var(--gold);clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%)}
+.piece.dot-p{border-radius:50%}
+@keyframes burst{0%{transform:translate(0,0) rotate(0);opacity:1}70%{opacity:1}100%{transform:translate(var(--dx),var(--dy)) rotate(var(--rot));opacity:0}}
+
+@media (max-width:680px){
+  .fields{grid-template-columns:1fr}
+  .note,.notes .note:nth-child(n){grid-column:1 / -1}
+  .panel-card{padding:50px 20px 42px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+<div id="confetti" aria-hidden="true"></div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="#">
+      <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><g fill="#ffb7c5"><ellipse cx="12" cy="4.6" rx="3" ry="4.6"/><ellipse cx="12" cy="4.6" rx="3" ry="4.6" transform="rotate(72 12 12)"/><ellipse cx="12" cy="4.6" rx="3" ry="4.6" transform="rotate(144 12 12)"/><ellipse cx="12" cy="4.6" rx="3" ry="4.6" transform="rotate(216 12 12)"/><ellipse cx="12" cy="4.6" rx="3" ry="4.6" transform="rotate(288 12 12)"/></g><circle cx="12" cy="12" r="2.6" fill="#fde68a"/></svg>
+      樱花生日簿
+    </a>
+    <div class="nav-links">
+      <a href="#cake">吹蜡烛</a>
+      <a href="#wall">心愿信箱</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+  <section class="hero">
+    <span class="petal" aria-hidden="true" style="left:6%;top:14%;width:16px;height:16px;background:#fecdd3;--r:24deg"></span>
+    <span class="petal" aria-hidden="true" style="left:13%;bottom:12%;width:12px;height:12px;background:#ffb7c5;--r:-14deg;animation-delay:-2s"></span>
+    <span class="petal" aria-hidden="true" style="right:8%;top:20%;width:14px;height:14px;background:#ffb7c5;--r:40deg;animation-delay:-1s"></span>
+    <span class="petal" aria-hidden="true" style="right:15%;bottom:16%;width:11px;height:11px;background:#fecdd3;--r:10deg;animation-delay:-3.4s"></span>
+    <span class="spark" aria-hidden="true" style="left:16%;top:8%;width:14px;height:14px"></span>
+    <span class="spark" aria-hidden="true" style="right:12%;top:5%;width:10px;height:10px;animation-delay:-1.2s"></span>
+    <span class="spark" aria-hidden="true" style="right:5%;bottom:24%;width:16px;height:16px;animation-delay:-0.6s"></span>
+    <div class="panel-card">
+      <svg class="flower" style="left:-11px;top:-11px" viewBox="0 0 24 24" aria-hidden="true"><g fill="#ffb7c5"><ellipse cx="12" cy="4.6" rx="3" ry="4.6"/><ellipse cx="12" cy="4.6" rx="3" ry="4.6" transform="rotate(72 12 12)"/><ellipse cx="12" cy="4.6" rx="3" ry="4.6" transform="rotate(144 12 12)"/><ellipse cx="12" cy="4.6" rx="3" ry="4.6" transform="rotate(216 12 12)"/><ellipse cx="12" cy="4.6" rx="3" ry="4.6" transform="rotate(288 12 12)"/></g><circle cx="12" cy="12" r="2.6" fill="#fde68a"/></svg>
+      <svg class="flower" style="right:-11px;top:-11px;transform:rotate(36deg)" viewBox="0 0 24 24" aria-hidden="true"><g fill="#c4b5fd"><ellipse cx="12" cy="4.6" rx="3" ry="4.6"/><ellipse cx="12" cy="4.6" rx="3" ry="4.6" transform="rotate(72 12 12)"/><ellipse cx="12" cy="4.6" rx="3" ry="4.6" transform="rotate(144 12 12)"/><ellipse cx="12" cy="4.6" rx="3" ry="4.6" transform="rotate(216 12 12)"/><ellipse cx="12" cy="4.6" rx="3" ry="4.6" transform="rotate(288 12 12)"/></g><circle cx="12" cy="12" r="2.6" fill="#fde68a"/></svg>
+      <svg class="flower" style="left:-11px;bottom:-11px;transform:rotate(-20deg)" viewBox="0 0 24 24" aria-hidden="true"><g fill="#c4b5fd"><ellipse cx="12" cy="4.6" rx="3" ry="4.6"/><ellipse cx="12" cy="4.6" rx="3" ry="4.6" transform="rotate(72 12 12)"/><ellipse cx="12" cy="4.6" rx="3" ry="4.6" transform="rotate(144 12 12)"/><ellipse cx="12" cy="4.6" rx="3" ry="4.6" transform="rotate(216 12 12)"/><ellipse cx="12" cy="4.6" rx="3" ry="4.6" transform="rotate(288 12 12)"/></g><circle cx="12" cy="12" r="2.6" fill="#fde68a"/></svg>
+      <svg class="flower" style="right:-11px;bottom:-11px;transform:rotate(60deg)" viewBox="0 0 24 24" aria-hidden="true"><g fill="#ffb7c5"><ellipse cx="12" cy="4.6" rx="3" ry="4.6"/><ellipse cx="12" cy="4.6" rx="3" ry="4.6" transform="rotate(72 12 12)"/><ellipse cx="12" cy="4.6" rx="3" ry="4.6" transform="rotate(144 12 12)"/><ellipse cx="12" cy="4.6" rx="3" ry="4.6" transform="rotate(216 12 12)"/><ellipse cx="12" cy="4.6" rx="3" ry="4.6" transform="rotate(288 12 12)"/></g><circle cx="12" cy="12" r="2.6" fill="#fde68a"/></svg>
+      <span class="ribbon">生日特别篇 · 今日主角</span>
+      <h1><span id="toName"></span>生日快乐！</h1>
+      <p class="hero-sub">这一页画满樱花和星光，只为你。新的一岁，愿所有心事都变成好事，像花瓣一样轻轻落进手心。</p>
+      <div class="hero-btns">
+        <a class="btn btn-pink" href="#cake">去吹蜡烛</a>
+        <a class="btn btn-lav" href="#wall">写下心愿</a>
+      </div>
+      <span class="spark" aria-hidden="true" style="left:10%;bottom:12%;width:12px;height:12px;animation-delay:-1.8s"></span>
+      <span class="spark" aria-hidden="true" style="right:9%;bottom:18%;width:9px;height:9px;animation-delay:-0.3s"></span>
+    </div>
+  </section>
+
+  <section class="sec" id="cake">
+    <div class="ribbon-lg">第一步 吹蜡烛</div>
+    <p class="sec-sub">把五根蜡烛全部吹灭，就能解锁许愿环节</p>
+    <div class="stage">
+      <div class="cake">
+        <div class="candles">
+          <button class="candle" aria-pressed="false" aria-label="第 1 根蜡烛"><span class="flame" aria-hidden="true"></span><span class="stick" style="--c:#ffb7c5" aria-hidden="true"></span></button>
+          <button class="candle" aria-pressed="false" aria-label="第 2 根蜡烛"><span class="flame" aria-hidden="true"></span><span class="stick" style="--c:#c4b5fd" aria-hidden="true"></span></button>
+          <button class="candle" aria-pressed="false" aria-label="第 3 根蜡烛"><span class="flame" aria-hidden="true"></span><span class="stick" style="--c:#fde68a" aria-hidden="true"></span></button>
+          <button class="candle" aria-pressed="false" aria-label="第 4 根蜡烛"><span class="flame" aria-hidden="true"></span><span class="stick" style="--c:#fecdd3" aria-hidden="true"></span></button>
+          <button class="candle" aria-pressed="false" aria-label="第 5 根蜡烛"><span class="flame" aria-hidden="true"></span><span class="stick" style="--c:#ffb7c5" aria-hidden="true"></span></button>
+        </div>
+        <div class="cake-body">
+          <div class="layer layer-top" aria-hidden="true">
+            <svg class="heart-top" style="left:26%" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.7-9.5-8.2C.7 10 2 6 5.5 5 7.7 4.4 10 5.5 12 8c2-2.5 4.3-3.6 6.5-3 3.5 1 4.8 5 3 7.8C19 16.3 12 21 12 21z" fill="#ffb7c5"/></svg>
+            <svg class="heart-top" style="left:60%" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.7-9.5-8.2C.7 10 2 6 5.5 5 7.7 4.4 10 5.5 12 8c2-2.5 4.3-3.6 6.5-3 3.5 1 4.8 5 3 7.8C19 16.3 12 21 12 21z" fill="#fecdd3"/></svg>
+          </div>
+          <div class="layer layer-mid" aria-hidden="true"></div>
+          <div class="layer layer-bot" aria-hidden="true"></div>
+          <div class="plate" aria-hidden="true"></div>
+        </div>
+      </div>
+      <p class="hint">点击蜡烛上的火苗，把它们一根根吹灭</p>
+      <p class="counter" aria-live="polite">已吹灭 <span id="outCount">0</span> / 5 根蜡烛</p>
+      <div id="wishBox" class="wish" role="status">
+        <span class="spark" aria-hidden="true" style="left:6%;top:8%;width:12px;height:12px;position:absolute"></span>
+        <span class="spark" aria-hidden="true" style="right:6%;top:12%;width:9px;height:9px;position:absolute;animation-delay:-1s"></span>
+        <p class="wish-text">五根蜡烛都灭啦——闭上眼睛，许一个樱花色的愿望！</p>
+        <button id="relight" class="btn btn-lav">重新点亮蜡烛</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="wall">
+    <div class="ribbon-lg">心愿信箱</div>
+    <p class="sec-sub">写下一句祝福，贴上金色火漆，投进信箱</p>
+    <form id="wishForm" class="letter">
+      <span class="lace lace-up" aria-hidden="true"></span>
+      <span class="lace lace-down" aria-hidden="true"></span>
+      <div class="fields">
+        <div>
+          <label for="name">你的名字</label>
+          <input class="input" id="name" maxlength="10" placeholder="例如：小明">
+        </div>
+        <div>
+          <label for="msg">祝福语</label>
+          <input class="input" id="msg" maxlength="40" required placeholder="例如：祝你天天开心，蛋糕越吃越多">
+        </div>
+      </div>
+      <button type="submit" class="btn btn-pink">投递心愿</button>
+    </form>
+    <div id="notes" class="notes">
+      <div class="note">
+        <span class="seal" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M12 21s-7-4.7-9.5-8.2C.7 10 2 6 5.5 5 7.7 4.4 10 5.5 12 8c2-2.5 4.3-3.6 6.5-3 3.5 1 4.8 5 3 7.8C19 16.3 12 21 12 21z" fill="#a8445e"/></svg></span>
+        <p class="note-msg">生日快乐！新的一岁也要白白胖胖，充满希望。</p>
+        <p class="note-name">—— 阿黄</p>
+      </div>
+      <div class="note">
+        <span class="seal" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M12 21s-7-4.7-9.5-8.2C.7 10 2 6 5.5 5 7.7 4.4 10 5.5 12 8c2-2.5 4.3-3.6 6.5-3 3.5 1 4.8 5 3 7.8C19 16.3 12 21 12 21z" fill="#a8445e"/></svg></span>
+        <p class="note-msg">愿你的烦恼像蜡烛一样，一口气就灭。</p>
+        <p class="note-name">—— 老王</p>
+      </div>
+      <div class="note">
+        <span class="seal" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M12 21s-7-4.7-9.5-8.2C.7 10 2 6 5.5 5 7.7 4.4 10 5.5 12 8c2-2.5 4.3-3.6 6.5-3 3.5 1 4.8 5 3 7.8C19 16.3 12 21 12 21z" fill="#a8445e"/></svg></span>
+        <p class="note-msg">蛋糕不大，快乐管够。生日快乐！</p>
+        <p class="note-name">—— 小蓝</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.7-9.5-8.2C.7 10 2 6 5.5 5 7.7 4.4 10 5.5 12 8c2-2.5 4.3-3.6 6.5-3 3.5 1 4.8 5 3 7.8C19 16.3 12 21 12 21z" fill="#ffb7c5"/></svg>
+  樱花生日簿 · 一页为你画的生日漫画 —— 少女漫画风演示页面
+</footer>
+
+<script>
+(function(){
+  var $ = function(s){ return document.querySelector(s); };
+  var candles = Array.prototype.slice.call(document.querySelectorAll('.candle'));
+  var outCountEl = $('#outCount');
+  var wishBox = $('#wishBox');
+  var out = 0;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  var to = new URLSearchParams(location.search).get('to');
+  if(to){
+    $('#toName').textContent = to + '，';
+    document.title = to + '，生日快乐 · 樱花生日簿';
+  }
+
+  function burst(){
+    var box = $('#confetti');
+    var r = $('.cake').getBoundingClientRect();
+    var ox = r.left + r.width/2, oy = r.top + r.height/3;
+    var petalColors = ['#fecdd3','#ffb7c5','#ffd7e0'];
+    for(var i=0;i<56;i++){
+      var p = document.createElement('div');
+      var kind = i % 5;
+      var w, h;
+      if(kind === 0 || kind === 1){ p.className = 'piece petal-p'; w = 9 + Math.random()*7; h = w; p.style.background = petalColors[i % petalColors.length]; }
+      else if(kind === 2 || kind === 3){ p.className = 'piece spark-p'; w = 8 + Math.random()*8; h = w; }
+      else { p.className = 'piece dot-p'; w = 6 + Math.random()*5; h = w; p.style.background = '#c4b5fd'; }
+      var dx = (Math.random()*340-170).toFixed(0);
+      var dy = (60 + Math.random()*300).toFixed(0);
+      var rot = (Math.random()<.5?-1:1)*(120 + Math.random()*360).toFixed(0);
+      var t = (0.9 + Math.random()*1.1).toFixed(2);
+      p.style.cssText += ';left:'+ox+'px;top:'+oy+'px;width:'+w+'px;height:'+h+'px;--dx:'+dx+'px;--dy:'+dy+'px;--rot:'+rot+'deg;--t:'+t+'s';
+      p.addEventListener('animationend', function(){ this.remove(); });
+      box.appendChild(p);
+    }
+  }
+
+  candles.forEach(function(c){
+    c.addEventListener('click', function(){
+      if(c.classList.contains('out')) return;
+      c.classList.add('out');
+      c.setAttribute('aria-pressed','true');
+      out++;
+      outCountEl.textContent = out;
+      if(out === candles.length){
+        wishBox.classList.add('on');
+        if(!reduce.matches) burst();
+      }
+    });
+  });
+
+  $('#relight').addEventListener('click', function(){
+    candles.forEach(function(c){
+      c.classList.remove('out');
+      c.setAttribute('aria-pressed','false');
+    });
+    out = 0;
+    outCountEl.textContent = '0';
+    wishBox.classList.remove('on');
+  });
+
+  $('#wishForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    var name = $('#name').value.trim() || '一位朋友';
+    var msg = $('#msg').value.trim();
+    if(!msg) return;
+    var note = document.createElement('div');
+    note.className = 'note new';
+    var seal = document.createElement('span');
+    seal.className = 'seal';
+    seal.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24"><path d="M12 21s-7-4.7-9.5-8.2C.7 10 2 6 5.5 5 7.7 4.4 10 5.5 12 8c2-2.5 4.3-3.6 6.5-3 3.5 1 4.8 5 3 7.8C19 16.3 12 21 12 21z" fill="#a8445e"/></svg>';
+    var p1 = document.createElement('p');
+    p1.className = 'note-msg';
+    p1.textContent = msg;
+    var p2 = document.createElement('p');
+    p2.className = 'note-name';
+    p2.textContent = '—— ' + name;
+    note.appendChild(seal); note.appendChild(p1); note.appendChild(p2);
+    $('#notes').prepend(note);
+    e.target.reset();
+  });
+})();
+</script>
+</body>
+</html>

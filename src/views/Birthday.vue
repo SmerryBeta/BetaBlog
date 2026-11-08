@@ -2,21 +2,35 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 const memories = [
-  { src: '/gallery/memory-01.webp', date: '2024.02.09', title: '胡萝屯的我们', tag: '相聚' },
-  { src: '/gallery/memory-02.webp', date: '2024.02.27', title: '樱花树下', tag: '相聚' },
-  { src: '/gallery/memory-03.webp', date: '2024.03.10', title: '今日份躺平', tag: '日常' },
+  { src: '/gallery/memory-01.webp', date: '2024.02.09', title: '我们', tag: '相聚' },
+  { src: '/gallery/memory-02.webp', date: '2024.02.27', title: '闷骚的灵', tag: '相聚' },
+  { src: '/gallery/memory-03.webp', date: '2024.03.10', title: '躺平拉拉', tag: '日常' },
   { src: '/gallery/memory-04.webp', date: '2024.03.10', title: '月光与晚风', tag: '风景' },
-  { src: '/gallery/memory-05.webp', date: '2024.03.13', title: '就这样靠着我', tag: '日常' },
+  { src: '/gallery/memory-05.webp', date: '2024.03.13', title: '就这样温柔的靠着我', tag: '日常' },
   { src: '/gallery/memory-06.webp', date: '2024.03.14', title: '哦我的天', tag: '相聚' },
-  { src: '/gallery/memory-07.webp', date: '2024.03.14', title: '夜色中看你', tag: '风景' },
+  { src: '/gallery/memory-07.webp', date: '2024.03.14', title: '看你', tag: '风景' },
   { src: '/gallery/memory-08.webp', date: '2024.03.14', title: '雄姿英发', tag: '风景' },
   { src: '/gallery/memory-09.webp', date: '2024.03.24', title: '大狗瞪小狗', tag: '日常' },
-  { src: '/gallery/memory-10.webp', date: '2024.05.18', title: '你送我的祝福，我还记得', tag: '相聚' },
-  { src: '/gallery/memory-11.webp', date: '2024.05.24', title: '最忙三人组', tag: '相聚' },
-  { src: '/gallery/memory-12.webp', date: '2024.05.31', title: '星光落在钦灵の草窝', tag: '风景' },
-  { src: '/gallery/memory-13.webp', date: '2024.05.31', title: '别打我啦 ￣へ￣', tag: '日常' },
-  { src: '/gallery/memory-14.webp', date: '2024.06.21', title: '一起去看星星', tag: '风景' },
-  { src: '/gallery/memory-15.webp', date: '2024.07.11', title: '晴空下的我们', tag: '相聚' },
+  { src: '/gallery/memory-10.webp', date: '2024.03.24', title: '夜色里的“小英雄”', tag: '风景' },
+  { src: '/gallery/memory-11.webp', date: '2024.05.18', title: '你送我的祝福，我还记得', tag: '相聚' },
+  { src: '/gallery/memory-12.webp', date: '2024.05.24', title: '最忙三人组', tag: '相聚' },
+  { src: '/gallery/memory-13.webp', date: '2024.05.31', title: '星光落在钦灵の草窝', tag: '风景' },
+  { src: '/gallery/memory-14.webp', date: '2024.05.31', title: '别打我啦 ￣へ￣', tag: '日常' },
+  { src: '/gallery/memory-15.webp', date: '2024.06.21', title: '一起去看星星', tag: '风景' },
+  { src: '/gallery/memory-16.webp', date: '2024.07.11', title: '晴空下的我们', tag: '相聚' },
+  { src: '/gallery/memory-17.webp', date: '2024.10.01', title: '兰州云合影的三小只特写', tag: '相聚' },
+  { src: '/gallery/memory-18.webp', date: '2024.10.10', title: '我的武器太弱小', tag: '日常' },
+  { src: '/gallery/memory-19.webp', date: '2024.10.12', title: '我是媒婆~', tag: '日常' },
+  { src: '/gallery/memory-20.webp', date: '2024.10.12', title: '搭小jio~', tag: '日常' },
+  { src: '/gallery/memory-21.webp', date: '2024.10.14', title: '看着正在设计豌豆射手的你', tag: '风景' },
+  { src: '/gallery/memory-22.webp', date: '2024.10.19', title: '植物们排排站', tag: '风景' },
+  { src: '/gallery/memory-23.webp', date: '2024.12.08', title: '我的肚子是什么味道', tag: '日常' },
+  { src: '/gallery/memory-24.webp', date: '2024.12.08', title: '软软的小狗灵', tag: '日常' },
+  { src: '/gallery/memory-25.webp', date: '2025.01.01', title: '一起走进 2025', tag: '相聚' },
+  { src: '/gallery/memory-27.webp', date: '2026.07.07', title: '我是僵尸，我要吃牢灵', tag: '日常' },
+  { src: '/gallery/memory-28.webp', date: '2026.08.10', title: '召唤小狗！', tag: '日常' },
+  { src: '/gallery/memory-26.webp', date: '2026.08.18', title: '钦灵养的小杯杯', tag: '相聚' }, // 这里顺序换了一些
+  { src: '/gallery/memory-29.webp', date: '2026.08.18', title: '《灭世魔狼钦灵》', tag: '日常' },
 ]
 
 const petals = [
@@ -43,7 +57,7 @@ const uiSounds = {
   pop: new Audio('/gallery/sounds/ui-pop.mp3'),
   wood: new Audio('/gallery/sounds/ui-wood-click.mp3'),
   turn: new Audio('/gallery/sounds/ui-turn.mp3'),
-  giftOpen: new Audio('/gallery/sounds/ui-gift-open.mp3'),
+  fireworks: new Audio('/gallery/sounds/ui-fireworks.mp3'),
   giftClose: new Audio('/gallery/sounds/ui-gift-close.mp3'),
 }
 
@@ -128,7 +142,7 @@ function onTouchEnd(event) {
 }
 
 function openSurprise() {
-  playUiSound('giftOpen')
+  playUiSound('fireworks')
   rememberFocus()
   surpriseOpen.value = true
 }
@@ -139,6 +153,8 @@ function scrollToMemories() {
 }
 
 function closeSurprise() {
+  uiSounds.fireworks.pause()
+  uiSounds.fireworks.currentTime = 0
   playUiSound('giftClose')
   surpriseOpen.value = false
   restoreFocus()
@@ -203,6 +219,7 @@ onBeforeUnmount(() => {
   window.removeEventListener('keydown', onKeydown)
   removeMusicUnlock()
   musicAudio.value?.pause()
+  uiSounds.fireworks.pause()
   document.body.style.overflow = ''
   clearTimeout(toastTimer)
 })
@@ -260,7 +277,7 @@ onBeforeUnmount(() => {
           </button>
           <a class="pill-button secondary-button" href="#memory-wall" @click.prevent="scrollToMemories">看看我们的回忆 <span aria-hidden="true">↓</span></a>
         </div>
-        <p class="archive-count"><span>15</span> 张照片 <i>·</i> <span>1</span> 段动画 <i>·</i> 好多祝福</p>
+        <p class="archive-count"><span>{{ memories.length }}</span> 张照片 <i>·</i> <span>1</span> 段动画 <i>·</i> 好多祝福</p>
       </div>
 
       <div class="hero-scrapbook">
@@ -284,7 +301,7 @@ onBeforeUnmount(() => {
         <span class="section-ribbon">TO MY DEAR</span>
         <p>愿你拥有拆开礼物的期待，也拥有平凡日子里的安心。</p>
         <div class="wish-keywords" aria-label="三个生日愿望">
-          <span>有花可赏</span><i>✿</i><span>有人相伴</span><i>✿</i><span>有梦可追</span>
+          <span>有爱可做</span><i>✿</i><span>友爱相伴</span><i>✿</i><span>追寻热爱</span>
         </div>
       </div>
       <div class="lace-edge lace-bottom" aria-hidden="true"></div>
@@ -295,7 +312,7 @@ onBeforeUnmount(() => {
         <div>
           <span class="section-kicker">MEMORIES IN BLOOM</span>
           <h2 id="memory-title">把回忆贴在这里</h2>
-          <p>每一张都很普通，拼在一起就闪闪发光。</p>
+          <p>每一张都很普通，拼在一起就很有感觉。</p>
         </div>
         <svg class="heading-flower" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7.2c-1.8-5.5-8.2-3.7-6.2 1.1-5.4-1.5-6.4 5.3-1.1 5.5-3.6 4.4 2.2 8.7 5.2 3.9 1.1 5.5 8.3 4.5 7.1-.7 5.1 2.1 8.3-4.2 3.1-6.3 4.7-3.1.7-8.6-4-6.3.2-5.5-6.5-5.7-6.2-.2Z"/><circle cx="12" cy="12" r="2.3"/></svg>
       </div>
@@ -318,7 +335,7 @@ onBeforeUnmount(() => {
           v-for="(memory, index) in visibleMemories"
           :key="memory.src"
           class="memory-card"
-          :class="{ featured: activeFilter === '全部' && (index === 0 || index === 9) }"
+          :class="{ featured: activeFilter === '全部' && (index === 0 || index === 9 || index === 15 || index === 21 || index === 24) }"
           type="button"
           @click="openImage(memory)"
           :aria-label="`放大查看：${memory.title}`"
@@ -335,9 +352,41 @@ onBeforeUnmount(() => {
         <div class="letter-copy">
           <span class="section-kicker">A LETTER FOR YOUR NEW CHAPTER</span>
           <h2 id="letter-title">致新一岁的钦灵</h2>
-          <p>希望你不必总是勇敢，也可以偶尔偷懒；希望你想去的地方都能抵达，想见的人都会重逢。</p>
-          <p>如果生活偶尔下起雨，就记得这里还存着许多晴天。生日快乐，今天和以后的每一天都要快乐。</p>
-          <div class="letter-signature">永远为你留一盏灯的人 <span>♡</span></div>
+          <p>这首歌曲是我挑了一个下午的，感觉钢琴声阵阵入心，嗯..随着旋律的流淌，看着一张一张的旧照片，真的挺感动的，就感觉，那眼泪不知不觉间就...唔</p>
+          <p>当然，之所以没有放传统的生日歌曲，是因为我并不喜欢那种俗套的感觉，我这个人嘛..有时候就是这样总想搞点特别的</p>
+          <p>其次呀，恭喜你暂时脱离了一段十分匆忙的时光，虽然这段时光我也暂时失去了跟你的联系。当然我也一直在想，一方面，多接触点现实的人或许也是你的选择呢？</p>
+          <p>其实我还想到，既然你都那么忙了我还打扰你感觉真的不是很好，刚刚好火花也灭了，所以我就不太想打扰你了</p>
+          <p>当然..那个时候我也在赶项目，被愚蠢的GLM5.3折腾的呀..我..唉，今天是11.7，我翻看了和你的私聊面板，最后一条来自你的消息被定格在了9月30日</p>
+          <p>说实话，感觉今年都没怎么跟你一起玩了，今年七月份暑期的农场物语，我还是比较后期的时候来的，你的上线时间刚刚好是我的下线时间，毕竟嘛我也不是夜行动物，蛮遗憾的，但是也跟你接触了那么一小段时间</p>
+          <p>哦！还有呢，记得今年MC出的快照有个官方联机，我们就在聊了一段时间，可惜我蛮健忘了，又忘了聊了啥</p>
+          <p>你看我这几个月你在忙的时候，你不是一直没空理我嘛，就跟你闹了几次矛盾，唉...</p>
+          <figure class="letter-photo tiny">
+            <span class="photo-tape" aria-hidden="true"></span>
+            <img src="/gallery/huggy.webp" alt="跟你和解后的第一个抱，太喜欢了！" loading="lazy">
+            <figcaption>跟你和解后的第一个抱，太喜欢了！</figcaption>
+          </figure>
+          <p>或许Lingchat真的有某种神奇的意义呢..现在的人们都太寂寞了，我那边也有猛兽的群聊，天天都跟他们聊天，但是永远都没有那种亲密的感觉，现代的AI或许能带来这项情感上的陪伴，我从45那边听说了你受到了企业的邀请，恭喜你呀！</p>
+          <p>不过呀，11月5日那天我以恋爱雪咪的身份混了进去...一个圈子毕竟有一个圈子的文化吧，我看到有管理员称号的机器人我就想试试他能不能管的住自己的神权</p>
+          <p>于是呀...感觉我那样测试你们的小钦灵,给你们群搞得，感觉我就像被绑在行刑车上罪恶多端的恶魔，下面是“天杀的萝莉”，“喵哒子”这些人的谩骂，“禁言她！踢了她！”</p>
+          <p>蛮抱歉给你惹的麻烦，不过我自己一直在反思，也在跟45、ACE讨论这个事情，跨圈子还是要了解一个圈子的文化，毕竟Lingchat的用户们是一个对AI有深刻感情的群体，我或许还是太冒犯了 : _</p>
+          <p>我退群了，应该是我第二次离开了，虽然我离开了，但是也感谢你在我退出群里后还为我说话</p>
+          <p>一年又过去了，亲爱的牢灵呀，现在我们都是22岁了，你也一天一天的在进步，45跟着你也学习了不少团队合作方面的课外知识，虽然很遗憾没能融入你的新圈子，或许就像你融入不了我在猛兽的新圈子</p>
+          <p>但是呢！如果以后还有什么MC联机的活动的话，一起玩吧！哈哈，你看我暑假还设计了一台一个游戏日180w的游戏币的超级生产资料，成功拿下了1e财富的任务，拿下了创造马达</p>
+          <figure class="letter-photo narrow">
+            <span class="photo-tape" aria-hidden="true"></span>
+            <img src="/gallery/letter-dolls.webp" alt="钦灵和我的棉花娃娃依偎在一起，身后是写给你的生日贺卡" loading="lazy">
+            <figcaption>两个小家伙已经约好了，下次一起玩</figcaption>
+          </figure>
+          <p>记得2024年的暑假，应该是我们在一起玩最快乐的一段时光了，一起聊天一起拍五周年，不过呢..未来是未知的，永远都不知道什么时候才会像当年那样在一起玩，就像这首歌，那个暑假..也将永远定格在回忆里了</p>
+          <p>感谢你与我做朋友的每一天呀！</p>
+          <p>如果生活偶尔下起雨，就记得这里还存着许多晴天。生日快乐，今天和以后的每一天都要快乐 ^ _ ^ ~</p>
+          <p>小兔子玩偶，你送我的，香香的软软的真可爱！快看：</p>
+          <figure class="letter-photo">
+            <span class="photo-tape" aria-hidden="true"></span>
+            <img src="/gallery/letter-bunny.webp" alt="你送我的小兔子玩偶，正坐在屏幕前看我们的回忆相册" loading="lazy">
+            <figcaption>它呀，正盯着屏幕里我们的回忆看呢</figcaption>
+          </figure>
+          <div class="letter-signature">—— SmerryBeta <span>♡</span></div>
         </div>
         <div class="letter-action">
           <span class="tiny-note">一句祝福，送给今天的你</span>
@@ -348,8 +397,8 @@ onBeforeUnmount(() => {
 
     <footer class="birthday-footer">
       <img src="/gallery/qingling-avatar.webp" alt="">
-      <p>樱花会落下，回忆不会。</p>
-      <span>这本小小的手账，送给独一无二的钦灵。</span>
+      <p>光阴易逝，往事铭心。</p>
+      <span>这本小小的手账，送给独一无二的小骚灵。</span>
     </footer>
 
     <Transition name="modal-fade">
@@ -506,18 +555,24 @@ onBeforeUnmount(() => {
 .memory-info i { display: grid; place-items: center; width: 29px; height: 29px; flex-shrink: 0; border-radius: 50%; background: #fff0f4; color: var(--deep-rose); font-style: normal; transition: all .3s ease-in-out; }
 .memory-card:hover .memory-info i { background: var(--pink); transform: rotate(10deg); }
 .birthday-letter { padding-bottom: 110px; }
-.letter-card { position: relative; display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 40px; padding: 48px 54px; border: 2px solid rgba(255, 183, 197, .24); border-radius: 30px; background-color: #fff; background-image: radial-gradient(circle, rgba(255, 183, 197, .17) .6px, transparent .8px); background-size: 11px 11px; box-shadow: 0 10px 40px rgba(255, 183, 197, .22); }
+.letter-card { position: relative; display: grid; grid-template-columns: 1fr; align-items: start; gap: 0; padding: 48px 54px 44px; border: 2px solid rgba(255, 183, 197, .24); border-radius: 30px; background-color: #fff; background-image: radial-gradient(circle, rgba(255, 183, 197, .17) .6px, transparent .8px); background-size: 11px 11px; box-shadow: 0 10px 40px rgba(255, 183, 197, .22); }
 .letter-card::before, .letter-card::after { content: "✿"; position: absolute; color: #e3a0b2; font-size: 26px; }
 .letter-card::before { top: 13px; left: 16px; }
 .letter-card::after { right: 16px; bottom: 13px; }
 .letter-stamp { position: absolute; top: 29px; right: 44px; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 68px; height: 78px; border: 2px dashed #e7a8b9; border-radius: 7px; background: #fff3f6; color: #d58299; font-size: 31px; transform: rotate(6deg); }
 .letter-stamp small { font-size: 8px; letter-spacing: 1px; }
-.letter-copy { max-width: 620px; }
+.letter-copy { max-width: 740px; margin-inline: auto; }
 .letter-copy h2 { color: var(--deep-rose); }
-.letter-copy p { margin-top: 16px; color: var(--soft-ink); font-size: 14px; line-height: 2; }
+.letter-copy p { margin-top: 18px; color: var(--soft-ink); font-size: 15px; line-height: 2.15; }
+.letter-photo { position: relative; width: min(720px, 100%); margin: 34px auto 8px; padding: 12px 12px 10px; border: 2px solid rgba(255, 183, 197, .35); border-radius: 16px; background: #fff; box-shadow: 0 10px 32px rgba(255, 183, 197, .3); transform: rotate(-1.2deg); }
+.letter-photo.narrow { width: min(460px, 92%); transform: rotate(1.4deg); }
+.letter-photo.tiny { width: min(400px, 62%); transform: rotate(1.8deg); }
+.letter-photo img { display: block; width: 100%; border-radius: 9px; background: #fff5f7; }
+.letter-photo figcaption { margin-top: 10px; color: #a77988; font-family: "Segoe Print", "Comic Sans MS", cursive; font-size: 12px; text-align: center; }
+.photo-tape { position: absolute; z-index: 2; top: -13px; left: 50%; width: 116px; height: 27px; background: rgba(253, 230, 138, .55); box-shadow: inset 0 0 8px rgba(255, 255, 255, .5); transform: translateX(-50%) rotate(-3deg); }
 .letter-signature { margin-top: 19px; color: #a75d74; font-size: 13px; text-align: right; }
 .letter-signature span { margin-left: 8px; font-size: 20px; }
-.letter-action { display: flex; flex-direction: column; align-items: center; gap: 11px; padding-bottom: 10px; }
+.letter-action { display: flex; flex-direction: column; align-items: center; gap: 11px; margin-top: 30px; padding-bottom: 10px; }
 .tiny-note { color: #9f7c88; font-size: 11px; }
 .birthday-footer { display: flex; flex-direction: column; align-items: center; padding: 35px 24px 38px; border-top: 2px solid rgba(255, 183, 197, .2); background: #ffe8ee; text-align: center; }
 .birthday-footer img { width: 45px; height: 45px; padding: 2px; border: 2px solid #fff; border-radius: 50%; object-fit: cover; box-shadow: 0 3px 14px rgba(255, 183, 197, .35); }
@@ -567,8 +622,6 @@ onBeforeUnmount(() => {
   .gif-teaser { right: -5px; width: 260px; }
   .memory-card { grid-column: span 6; }
   .memory-card.featured { grid-column: span 12; }
-  .letter-card { grid-template-columns: 1fr; align-items: start; }
-  .letter-action { align-items: flex-start; }
 }
 @media (max-width: 760px) {
   .birthday-shell { width: min(100% - 34px, 620px); }
