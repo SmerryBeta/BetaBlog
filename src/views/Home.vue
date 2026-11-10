@@ -271,6 +271,26 @@ onBeforeUnmount(() => {
 .avatar-chip small { color: #a893cf; font-size: 10px; }
 .avatar-chip b { font-size: 13px; }
 
+.post-meta {
+  flex-wrap: wrap;
+  gap: 7px;
+}
+.post-date {
+  flex-shrink: 0;
+  margin-right: 3px;
+  white-space: nowrap;
+}
+.tag {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  max-width: 100%;
+  padding: 3px 10px;
+  border-radius: 999px;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
 .heimo-player {
   position: fixed;
   right: 18px;

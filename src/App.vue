@@ -26,6 +26,7 @@ const isHeimo = computed(() => route.path === '/')
         <router-link to="/" class="logo"><img class="logo-mark" :src="asset('/smerry-icon.png')" alt="" aria-hidden="true">{{ site.name }}</router-link>
         <nav>
           <router-link to="/" exact>主页</router-link>
+          <router-link to="/tools">工具</router-link>
           <router-link to="/about">关于</router-link>
         </nav>
       </div>

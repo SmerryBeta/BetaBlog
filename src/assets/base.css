@@ -225,6 +225,67 @@ main { flex: 1; padding: 48px 0 72px; }
 }
 .back:active { transform: translateY(1px); box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.08); }
 
+/* 工具页共用：纸板凹槽输入框、纸片按钮、状态条 */
+.t-sub { margin-top: 8px; color: var(--ink-soft); font-size: 14px; }
+.t-sub code, .t-hint code {
+  background: #f3ece2;
+  border-radius: 5px;
+  padding: 1px 7px;
+  font-size: 13px;
+}
+.t-label { display: block; margin: 18px 0 7px; font-weight: 700; color: var(--ink); }
+.t-hint { margin-top: 7px; color: var(--ink-soft); font-size: 13px; }
+
+/* 纸板裁出的凹槽：focus 时切口加深 */
+.t-input {
+  width: 100%;
+  border: 2px solid rgba(232, 93, 117, 0.3);
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--ink);
+  border-radius: 12px;
+  padding: 11px 12px;
+  font: inherit;
+  line-height: 1.7;
+  outline: none;
+  box-shadow: inset 2px 3px 5px rgba(0, 0, 0, 0.04);
+  transition: border-color 0.2s ease-out, box-shadow 0.2s ease-out;
+}
+.t-input:focus {
+  border-color: rgba(92, 184, 165, 0.6);
+  box-shadow: inset 3px 4px 7px rgba(0, 0, 0, 0.07);
+}
+.t-input::placeholder { color: var(--ink-faint); }
+.t-area { min-height: 150px; resize: vertical; }
+.t-mono { font-family: Consolas, "Courier New", monospace; font-size: 14px; }
+
+/* 纸片按钮：凸起 → 悬停抬起 → 按下压回桌面 */
+.t-btn {
+  border-radius: 12px;
+  padding: 11px 14px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+}
+.t-btn:hover { transform: translateY(-3px); box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.12); }
+.t-btn:active { transform: translateY(1px); box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.08); }
+.t-btn:focus-visible { outline: 3px solid rgba(107, 127, 181, 0.45); outline-offset: 2px; }
+.t-btn-red { background: var(--red); border: 2px solid var(--red-deep); color: #fff; }
+.t-btn-teal { background: var(--teal); border: 2px solid #3f9a82; color: #fff; }
+.t-btn-ghost { background: #fff; border: 2px solid var(--ink); color: var(--ink); }
+
+.t-status {
+  margin-top: 14px;
+  min-height: 24px;
+  color: var(--ink-soft);
+  font-size: 13px;
+  white-space: pre-wrap;
+}
+.t-status.ok { color: #3f8f7b; font-weight: 700; }
+.t-status.error { color: var(--red-deep); font-weight: 700; }
+
+
 .site-footer {
   border-top: 2px solid var(--line);
   background: #fff;
@@ -378,6 +439,15 @@ main { flex: 1; padding: 48px 0 72px; }
   color: #e9d5ff;
   box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.25);
 }
+.layout-heimo .post-card .tag {
+  border: 1px solid rgba(216, 180, 254, 0.24);
+  background: linear-gradient(135deg, rgba(192, 132, 252, 0.2), rgba(124, 58, 237, 0.12));
+  color: #dec8fb;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  box-shadow: none;
+}
 .layout-heimo .post-excerpt { color: #b3a4d6; }
 .layout-heimo .empty { color: #a893cf; }
 
@@ -385,6 +455,7 @@ main { flex: 1; padding: 48px 0 72px; }
   .heimo-sky .bolt-b { right: 8%; }
 }
 @media (prefers-reduced-motion: reduce) {
+  .t-input, .t-btn { transition: none; }
   .heimo-sky .storm-a, .heimo-sky .storm-b, .heimo-sky .flash-a, .heimo-sky .flash-b, .heimo-sky .bolt-a, .heimo-sky .bolt-b, .heimo-sky .heimo-photo { animation: none; }
   .heimo-sky .flash, .heimo-sky .bolt { opacity: 0 !important; }
   .heimo-sky .stars { animation: none; opacity: 0.6; }

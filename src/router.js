@@ -3,6 +3,10 @@ import Home from './views/Home.vue'
 import Post from './views/Post.vue'
 import About from './views/About.vue'
 import Birthday from './views/Birthday.vue'
+import BirthdayWaiting from './views/BirthdayWaiting.vue'
+import Tools from './views/Tools.vue'
+import Encryptor from './views/Encryptor.vue'
+import SecretNote from './views/SecretNote.vue'
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -15,7 +19,11 @@ const router = createRouter({
     { path: '/', component: Home },
     { path: '/post/:slug', component: Post },
     { path: '/about', component: About },
-    { path: '/birthday', component: Birthday, meta: { wide: true, standalone: true } },
+    { path: '/tools', component: Tools },
+    { path: '/tools/encrypt', component: Encryptor },
+    { path: '/tools/note', component: SecretNote },
+    { path: '/birthday', component: BirthdayWaiting, meta: { wide: true, standalone: true } },
+    { path: '/birthday261109', component: Birthday, meta: { wide: true, standalone: true } },
     { path: '/:pathMatch(.*)*', component: Home },
   ],
 })

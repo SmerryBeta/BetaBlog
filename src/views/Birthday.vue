@@ -230,7 +230,7 @@ onBeforeUnmount(() => {
   <div class="birthday-page">
     <header class="birthday-nav">
       <div class="birthday-shell nav-inner">
-        <router-link to="/birthday" class="birthday-brand" aria-label="钦灵的生日手账首页">
+        <router-link to="/birthday261109" class="birthday-brand" aria-label="钦灵的生日手账首页">
           <img :src="asset('/gallery/qingling-avatar.webp')" alt="钦灵的头像">
           <span><b>钦灵的生日手账</b><small>QINGLING'S LITTLE ALBUM</small></span>
         </router-link>
